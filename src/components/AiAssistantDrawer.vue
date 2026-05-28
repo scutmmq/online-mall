@@ -211,7 +211,32 @@ const handlePostConfirmNavigation = (draft, data) => {
     }, 260);
 };
 
-watch(visible, (val) => { if (val) loadSessions(); });
+// ── 点击抽屉外部关闭 ─────────────────────────────────────────────────
+const onDocumentMouseDown = (e) => {
+    if (!visible.value || resizing.value) return;
+    // 点击在抽屉面板内 → 不关
+    const drawerEl = document.querySelector('.el-drawer');
+    if (drawerEl?.contains(e.target)) return;
+    // 点击在手柄上 → 不关（手柄自己处理）
+    const handleEl = document.querySelector('.ai-edge-handle');
+    if (handleEl?.contains(e.target)) return;
+    // 点击在悬浮球上 → 不关（悬浮球 toggle 逻辑自己处理）
+    const fabEl = document.querySelector('.ai-fab');
+    if (fabEl?.contains(e.target)) return;
+    visible.value = false;
+};
+
+watch(visible, (val) => {
+    if (val) {
+        loadSessions();
+        // 延迟一帧再监听，避免打开抽屉的那次点击立刻触发关闭
+        requestAnimationFrame(() => {
+            document.addEventListener("mousedown", onDocumentMouseDown);
+        });
+    } else {
+        document.removeEventListener("mousedown", onDocumentMouseDown);
+    }
+});
 onMounted(() => {
     if (visible.value) loadSessions();
     window.addEventListener("resize", onWindowResize);
@@ -220,6 +245,7 @@ onBeforeUnmount(() => {
     window.removeEventListener("resize", onWindowResize);
     document.removeEventListener("mousemove", onResizeMove);
     document.removeEventListener("mouseup",   onResizeUp);
+    document.removeEventListener("mousedown", onDocumentMouseDown);
 });
 </script>
 
