@@ -49,7 +49,7 @@ const openAiDrawer = () => {
     location.href = "/login"
     return
   }
-  aiDrawerVisible.value = true
+  aiDrawerVisible.value = !aiDrawerVisible.value
 }
 
 // WebSocket 连接（实时消息通知）

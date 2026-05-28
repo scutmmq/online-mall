@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
     top: 0;
     bottom: 0;
     width: 18px;
-    z-index: 2001;
+    z-index: 9999;
     cursor: ew-resize;
     background: #f4f4f6;
     border-left: 1px solid #e0e0e8;
