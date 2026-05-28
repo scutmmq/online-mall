@@ -300,7 +300,7 @@ onMounted(() => {
 .order-detail-container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 28px 24px 56px;
 }
 
 .loading,

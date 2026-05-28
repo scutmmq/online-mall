@@ -524,7 +524,9 @@ const connectNotify = () => {
     </div>
   </div>
 
-  <router-view></router-view>
+  <div class="page-content">
+    <router-view></router-view>
+  </div>
 
   <!-- AI 悬浮按钮 + 抽屉 -->
   <AiFloatingButton v-if="isLogin" @click="openAiDrawer" />
@@ -901,6 +903,11 @@ const connectNotify = () => {
   color: #ff4d4f;
   background-color: #fef0f0;
   transform: translateY(-1px);
+}
+
+/* 所有页面内容区域统一顶部偏移，避免被 fixed header(60px) 遮挡 */
+.page-content {
+  padding-top: 60px;
 }
 
 /* 主内容区域样式 */

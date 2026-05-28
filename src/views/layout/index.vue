@@ -243,7 +243,7 @@ const goToDetail = (productId) => {
 .home-page {
   max-width: 1320px;
   margin: 0 auto;
-  padding: 104px 24px 56px;
+  padding: 44px 24px 56px;
 }
 
 .home-search {
