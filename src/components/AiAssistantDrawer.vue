@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
 import {
     aiChatApi,
@@ -25,6 +26,7 @@ const initialWidth = () => {
 };
 const drawerWidth = ref(initialWidth());
 const drawerSize = computed(() => drawerWidth.value + "px");
+const router = useRouter();
 
 let resizeStartX = 0;
 let resizeStartWidth = 0;
@@ -238,27 +240,28 @@ const cleanupBodyStyles = () => {
 };
 
 const handlePostConfirmNavigation = (draft, data) => {
-    // 先收起抽屉，等动画结束再跳，避免 body 样式残留到目标页
+    // 先收起抽屉，等动画结束再用 router.push 做 SPA 跳转。
+    // 用 router.push 而非 location.href，避免硬重载时 CSS 还未加载
+    // 导致 padding-top 短暂失效、顶部内容被遮（FOUC）。
     visible.value = false;
     setTimeout(() => {
         cleanupBodyStyles();
         switch (draft.type) {
             case "CREATE_ORDER":
-                if (data && (data.orderId || data.id)) {
-                    location.href = `/order/${data.orderId || data.id}`;
-                } else {
-                    location.href = "/user/orders";
-                }
+                router.push(data && (data.orderId || data.id)
+                    ? `/order/${data.orderId || data.id}`
+                    : "/user/orders");
                 break;
             case "ADD_CART_ITEM":
                 ElMessage.success("已加入购物车");
                 break;
             case "REGISTER_MERCHANT":
-                location.href = "/merchant/main";
+                router.push("/merchant/main");
                 break;
             case "UPDATE_USER_PROFILE":
             case "UPDATE_MERCHANT":
-                location.reload();
+                // 当前页刷新：重新 push 同路径触发组件重载
+                router.go(0);
                 break;
             default:
                 break;
