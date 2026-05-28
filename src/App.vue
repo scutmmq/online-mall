@@ -1084,16 +1084,17 @@ const connectNotify = () => {
 /* 折叠/展开按钮 */
 .sidebar-toggle {
   position: absolute;
-  left: -40px;
+  left: -32px;
   top: 50%;
   transform: translateY(-50%);
-  width: 40px;
-  height: 80px;
-  border: 1px solid #111827;
-  background: #111827;
+  width: 32px;
+  height: 64px;
+  border: 1px solid var(--mall-border);
+  border-right: none;
+  background: var(--mall-surface);
   background-image: none;
   border-radius: 8px 0 0 8px;
-  box-shadow: none;
+  box-shadow: -2px 0 8px rgba(15, 23, 42, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1104,11 +1105,19 @@ const connectNotify = () => {
 
 .sidebar-toggle:hover,
 .sidebar-toggle:active,
-.sidebar-toggle:focus-visible,
+.sidebar-toggle:focus-visible {
+  background: var(--mall-surface-muted);
+  border-color: var(--mall-border-strong);
+  background-image: none;
+  box-shadow: -2px 0 12px rgba(15, 23, 42, 0.1);
+  transform: translateY(-50%);
+  outline: none;
+}
+
 .sidebar.expanded .sidebar-toggle,
 .sidebar.expanded .sidebar-toggle:hover {
-  border-color: #111827;
-  background: #111827;
+  background: var(--mall-surface-muted);
+  border-color: var(--mall-border-strong);
   background-image: none;
   box-shadow: none;
   transform: translateY(-50%);
@@ -1116,8 +1125,8 @@ const connectNotify = () => {
 }
 
 .sidebar-toggle .el-icon {
-  font-size: 24px;
-  color: #ffffff;
+  font-size: 18px;
+  color: var(--mall-text-muted);
   font-weight: bold;
 }
 
@@ -1465,9 +1474,9 @@ const connectNotify = () => {
   }
 
   .sidebar-toggle {
-    left: -35px;
-    width: 35px;
-    height: 60px;
+    left: -28px;
+    width: 28px;
+    height: 52px;
   }
 }
 
@@ -1599,21 +1608,23 @@ const connectNotify = () => {
 }
 
 .sidebar-toggle {
-  border: 1px solid #111827;
-  background: #111827 !important;
+  border: 1px solid var(--mall-border);
+  border-right: none;
+  background: var(--mall-surface) !important;
   background-image: none !important;
-  box-shadow: none;
+  box-shadow: -2px 0 8px rgba(15, 23, 42, 0.06);
 }
 
 .sidebar-toggle:hover {
-  background: #111827 !important;
+  background: var(--mall-surface-muted) !important;
   background-image: none !important;
-  box-shadow: none !important;
+  border-color: var(--mall-border-strong);
+  box-shadow: -2px 0 12px rgba(15, 23, 42, 0.1) !important;
   transform: translateY(-50%) !important;
 }
 
 .sidebar-toggle .el-icon {
-  color: #fff !important;
+  color: var(--mall-text-muted) !important;
 }
 
 @media (max-width: 768px) {

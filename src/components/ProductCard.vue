@@ -57,18 +57,20 @@ const priceDecimal = computed(() => {
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid var(--mall-border);
+  border-radius: var(--mall-radius);
+  background: var(--mall-surface);
   cursor: pointer;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.07), 0 0 0 1px rgba(15, 23, 42, 0.05);
-  transition: transform 0.22s ease, box-shadow 0.22s ease;
+  box-shadow: var(--mall-shadow);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
   will-change: transform;
 }
 
 .product-card:hover,
 .product-card:focus-visible {
-  transform: translateY(-5px);
-  box-shadow: 0 14px 36px rgba(15, 23, 42, 0.13), 0 0 0 1px rgba(15, 23, 42, 0.05);
+  transform: translateY(-4px);
+  border-color: var(--mall-border-strong);
+  box-shadow: var(--mall-shadow-hover);
   outline: none;
 }
 
@@ -125,7 +127,7 @@ const priceDecimal = computed(() => {
 
 .product-name {
   margin: 0;
-  color: #1a1a2e;
+  color: var(--mall-text);
   display: -webkit-box;
   overflow: hidden;
   font-size: 14px;
@@ -140,7 +142,7 @@ const priceDecimal = computed(() => {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  color: #aaa;
+  color: var(--mall-text-subtle, #9ca3af);
   font-size: 12px;
   overflow: hidden;
 }
