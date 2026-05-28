@@ -214,12 +214,9 @@ const handlePostConfirmNavigation = (draft, data) => {
 // ── 点击抽屉外部关闭 ─────────────────────────────────────────────────
 const onDocumentMouseDown = (e) => {
     if (!visible.value || resizing.value) return;
-    // 点击在抽屉面板内 → 不关
+    // 点击在抽屉面板或手柄内 → 不关（手柄现在是抽屉的子元素）
     const drawerEl = document.querySelector('.el-drawer');
     if (drawerEl?.contains(e.target)) return;
-    // 点击在手柄上 → 不关（手柄自己处理）
-    const handleEl = document.querySelector('.ai-edge-handle');
-    if (handleEl?.contains(e.target)) return;
     // 点击在悬浮球上 → 不关（悬浮球 toggle 逻辑自己处理）
     const fabEl = document.querySelector('.ai-fab');
     if (fabEl?.contains(e.target)) return;
@@ -250,21 +247,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <!-- ① 拖拽/折叠手柄：teleport 到 body 避免被 el-drawer overflow 裁剪 -->
-    <teleport to="body">
-        <div
-            v-if="visible"
-            class="ai-edge-handle"
-            :class="{ 'is-resizing': resizing }"
-            :style="{ right: drawerWidth + 'px' }"
-            title="拖动调整宽度 · 点击收起"
-            @mousedown="onHandleMouseDown"
-        >
-            <span class="handle-arrow">❮</span>
-        </div>
-    </teleport>
-
-    <!-- ② 抽屉本体：关掉默认 header，自己画 -->
+    <!-- 抽屉本体 -->
     <el-drawer
         v-model="visible"
         direction="rtl"
@@ -273,7 +256,18 @@ onBeforeUnmount(() => {
         :modal="false"
         :with-header="false"
         :class="{ 'ai-resizing': resizing }"
+        class="ai-drawer-wrapper"
     >
+        <!-- 手柄：作为抽屉的子元素，绝对定位在左边缘外侧 -->
+        <div
+            class="ai-edge-handle"
+            :class="{ 'is-resizing': resizing }"
+            title="拖动调整宽度 · 点击收起"
+            @mousedown="onHandleMouseDown"
+        >
+            <span class="handle-arrow">❮</span>
+        </div>
+
         <div class="ai-drawer">
             <!-- 自定义 Header -->
             <div class="ai-header">
@@ -377,16 +371,27 @@ onBeforeUnmount(() => {
 </template>
 
 <style scoped>
-/* ── 边缘手柄（通过 teleport 渲染到 body） ─────────────────────────────── */
+/* ── 让 el-drawer 允许子元素溢出（手柄在左边缘外侧） ─────────────────── */
+:deep(.ai-drawer-wrapper .el-drawer) {
+    overflow: visible !important;
+}
+:deep(.ai-drawer-wrapper .el-drawer__body) {
+    overflow: visible !important;
+    position: relative;
+}
+
+/* ── 边缘手柄（抽屉子元素，绝对定位在左边缘外） ──────────────────────── */
 .ai-edge-handle {
-    position: fixed;
+    position: absolute;
     top: 0;
     bottom: 0;
+    left: -18px;
     width: 18px;
-    z-index: 9999;
     cursor: ew-resize;
     background: var(--mall-surface-muted, #f9fafb);
     border-left: 1px solid var(--mall-border, #e5e7eb);
+    border-top-left-radius: 6px;
+    border-bottom-left-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -407,7 +412,7 @@ onBeforeUnmount(() => {
 }
 .ai-edge-handle:hover .handle-arrow,
 .ai-edge-handle.is-resizing .handle-arrow {
-    color: #1f6feb;
+    color: var(--mall-primary, #1f6feb);
 }
 
 /* ── 抽屉整体 ────────────────────────────────────────────────────────────── */
