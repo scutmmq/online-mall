@@ -265,7 +265,7 @@ const goToDetail = (productId) => {
 
 .search-box {
   width: 100%;
-  max-width: 680px;
+  max-width: min(80%, 800px);
 }
 
 .search-input {
