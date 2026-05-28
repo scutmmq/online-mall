@@ -253,7 +253,7 @@ onBeforeUnmount(() => {
             <div class="ai-header">
                 <span class="ai-header-title">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="vertical-align:-2px;margin-right:6px">
-                        <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="#7c3aed" stroke="#7c3aed" stroke-width="0.5"/>
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z" stroke="#1f6feb" stroke-width="1.8" fill="none"/>
                     </svg>
                     荒天 AI 助手
                 </span>
@@ -359,8 +359,8 @@ onBeforeUnmount(() => {
     width: 18px;
     z-index: 9999;
     cursor: ew-resize;
-    background: #f4f4f6;
-    border-left: 1px solid #e0e0e8;
+    background: var(--mall-surface-muted, #f9fafb);
+    border-left: 1px solid var(--mall-border, #e5e7eb);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -369,8 +369,8 @@ onBeforeUnmount(() => {
 }
 .ai-edge-handle:hover,
 .ai-edge-handle.is-resizing {
-    background: #ebe8f8;
-    border-color: #c4b5fd;
+    background: #eef5ff;
+    border-color: #bcd4ff;
 }
 .handle-arrow {
     font-size: 11px;
@@ -381,7 +381,7 @@ onBeforeUnmount(() => {
 }
 .ai-edge-handle:hover .handle-arrow,
 .ai-edge-handle.is-resizing .handle-arrow {
-    color: #7c3aed;
+    color: #1f6feb;
 }
 
 /* ── 抽屉整体 ────────────────────────────────────────────────────────────── */
@@ -408,12 +408,12 @@ onBeforeUnmount(() => {
     height: 52px;
     padding: 0 14px 0 16px;
     background: #fff;
-    border-bottom: 1px solid #ebebef;
+    border-bottom: 1px solid var(--mall-border, #e5e7eb);
 }
 .ai-header-title {
     font-size: 15px;
     font-weight: 700;
-    color: #1a1a2e;
+    color: var(--mall-text, #111827);
     display: flex;
     align-items: center;
 }
@@ -455,10 +455,10 @@ onBeforeUnmount(() => {
 .ai-sidebar {
     width: 148px;
     flex: 0 0 148px;
-    border-right: 1px solid #ebebef;
+    border-right: 1px solid var(--mall-border, #e5e7eb);
     display: flex;
     flex-direction: column;
-    background: #fafafa;
+    background: var(--mall-surface-muted, #f9fafb);
 }
 .ai-session-list {
     flex: 1;
@@ -474,17 +474,17 @@ onBeforeUnmount(() => {
     transition: background 0.15s ease;
 }
 .ai-session-item:hover   { background: #f0f0f5; }
-.ai-session-item.active  { background: #ede9fb; }
+.ai-session-item.active  { background: #eef5ff; }
 .s-title {
     font-size: 12.5px;
-    color: #2d2d3a;
+    color: var(--mall-text, #111827);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
 .s-meta {
     font-size: 11px;
-    color: #aaa;
+    color: var(--mall-text-subtle, #9ca3af);
     margin-top: 2px;
 }
 .ai-empty {
@@ -506,7 +506,7 @@ onBeforeUnmount(() => {
     overflow-y: auto;
     overscroll-behavior: contain;   /* ← 滚轮隔离：在此区域内滚动不会穿透到主页 */
     padding: 14px 12px;
-    background: #f7f7fb;
+    background: var(--mall-surface-muted, #f9fafb);
 }
 
 /* 空状态引导 */
@@ -538,16 +538,16 @@ onBeforeUnmount(() => {
     line-height: 1.6;
 }
 .ai-msg.user .bubble {
-    background: #7c3aed;
+    background: var(--mall-primary, #1f6feb);
     color: #fff;
     border-bottom-right-radius: 3px;
     white-space: pre-wrap;
 }
 .ai-msg.assistant .bubble {
     background: #fff;
-    border: 1px solid #e8e8ee;
+    border: 1px solid var(--mall-border, #e5e7eb);
     border-bottom-left-radius: 3px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    box-shadow: var(--mall-shadow, 0 1px 2px rgba(15, 23, 42, 0.06));
 }
 
 /* ── 草稿操作卡片 ────────────────────────────────────────────────────────── */
@@ -571,7 +571,7 @@ onBeforeUnmount(() => {
 /* ── 输入区 ──────────────────────────────────────────────────────────────── */
 .ai-input {
     flex: 0 0 auto;
-    border-top: 1px solid #ebebef;
+    border-top: 1px solid var(--mall-border, #e5e7eb);
     padding: 10px;
     display: flex;
     gap: 8px;
@@ -580,14 +580,14 @@ onBeforeUnmount(() => {
 }
 .ai-input :deep(.el-textarea) { flex: 1; }
 .ai-input :deep(.el-textarea__inner) {
-    background: #f7f7fb;
-    border-color: #e8e8ee;
-    border-radius: 8px;
+    background: var(--mall-surface-muted, #f9fafb);
+    border-color: var(--mall-border, #e5e7eb);
+    border-radius: var(--mall-radius, 8px);
     font-size: 13.5px;
     resize: none;
 }
 .ai-input :deep(.el-textarea__inner:focus) {
-    border-color: #a78bfa;
-    box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.12);
+    border-color: var(--mall-primary, #1f6feb);
+    box-shadow: 0 0 0 2px rgba(31, 111, 235, 0.12);
 }
 </style>
