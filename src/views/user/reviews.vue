@@ -217,7 +217,7 @@ onMounted(() => {
 .review-card {
   margin-bottom: 20px;
   border-radius: 12px;
-  border: 1px solid rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(31, 111, 235, 0.1);
   background: rgba(255, 255, 255, 0.9);
   transition: all 0.3s ease;
 }
@@ -238,14 +238,14 @@ onMounted(() => {
   align-items: center;
   gap: 15px;
   padding: 15px;
-  background: rgba(102, 126, 234, 0.05);
+  background: rgba(31, 111, 235, 0.05);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .product-info:hover {
-  background: rgba(102, 126, 234, 0.1);
+  background: rgba(31, 111, 235, 0.1);
 }
 
 .product-image {
@@ -369,7 +369,7 @@ onMounted(() => {
   padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  border-left: 4px solid #1890ff;
+  border-left: 4px solid var(--mall-primary);
 }
 
 .reply-header {

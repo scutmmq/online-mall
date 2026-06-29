@@ -441,11 +441,11 @@ onMounted(() => {
 }
 
 .default-tag {
-    background-color: #e6f7ff;
-    color: #1890ff;
+    background-color: var(--mall-accent-bg);
+    color: var(--mall-primary);
     font-size: 12px;
     padding: 2px 8px;
-    border-radius: 4px;
+    border-radius: 999px;
 }
 
 .address-detail {

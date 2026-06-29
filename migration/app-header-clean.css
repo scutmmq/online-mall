@@ -1,0 +1,85 @@
+/* ============================================================================
+   荒天享物商城 · 顶部头部「去紫」覆盖样式
+   ----------------------------------------------------------------------------
+   用法：把本文件的内容【整段粘贴到 src/App.vue 的 <style> 末尾】。
+   App.vue 的 <style> 不是 scoped（全局），CSS 后者生效，所以追加在最后即可
+   覆盖前面的紫色，无需删除旧代码。
+   依赖：src/assets/main.css 里的 --mall-* 变量（你已具备）。
+   ============================================================================ */
+
+/* 1) 去掉全屏彩虹动画背景，换成商城浅灰底 */
+.global-bg {
+  background: var(--mall-bg) !important;
+  background-image: none !important;
+  animation: none !important;
+  opacity: 1 !important;
+}
+
+/* 2) 顶部头部：紫色渐变 → 干净白底 + 灰描边 + 柔和阴影 */
+.app-header {
+  background: var(--mall-surface) !important;
+  background-image: none !important;
+  color: var(--mall-text) !important;
+  text-shadow: none !important;
+  border-bottom: 1px solid var(--mall-border) !important;
+  box-shadow: var(--mall-shadow) !important;
+  animation: none !important;
+}
+.app-header::before {
+  display: none !important;   /* 移除紫色动画遮罩层 */
+}
+
+/* 3) 商城 Logo：去玻璃态，蓝图标 + 深色字 */
+.mall-logo {
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  color: var(--mall-text) !important;
+  text-shadow: none !important;
+  box-shadow: none !important;
+}
+.mall-logo:hover {
+  background: var(--mall-surface-muted) !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+.mall-logo .el-icon {
+  color: var(--mall-primary) !important;
+  filter: none !important;
+}
+
+/* 4) 右侧导航链接：玻璃白胶囊 → 干净文字按钮，hover 转蓝 */
+.header-right .el-link,
+.header-link {
+  background: transparent !important;
+  border: 0 !important;
+  backdrop-filter: none !important;
+  box-shadow: none !important;
+  color: var(--mall-text-muted) !important;
+  text-shadow: none !important;
+  border-radius: var(--mall-radius-sm) !important;
+}
+.header-right .el-link::before,
+.header-link::before {
+  display: none !important;    /* 移除内发光伪元素 */
+}
+.header-right .el-link:hover,
+.header-link:hover {
+  color: var(--mall-primary) !important;
+  background: var(--mall-surface-muted) !important;
+  transform: none !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  border-color: transparent !important;
+}
+.header-right .el-icon {
+  color: inherit !important;
+}
+
+/* 5) 自定义通知：去渐变，纯白卡 */
+.custom-notification {
+  background: var(--mall-surface) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  border-radius: var(--mall-radius) !important;
+}

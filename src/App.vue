@@ -452,13 +452,6 @@ const connectNotify = () => {
         <div class="header-right">
           <el-link class="header-link" v-if="ifMerchant" href="/Merchant">我的店铺</el-link>
           <el-link class="header-link" v-if="!ifMerchant" href="/merchant/register">注册店铺</el-link>
-          <!--          <el-link class="header-link">-->
-          <!--            <el-badge :value="200" :max="99" class="item">-->
-          <!--              <el-icon>-->
-          <!--                <ChatDotSquare />-->
-          <!--              </el-icon><span>消息</span>-->
-          <!--            </el-badge>-->
-          <!--          </el-link>-->
           <el-link class="header-link" href="/user/orders">我的订单</el-link>
           <el-link class="header-link">
             <el-icon>
@@ -589,271 +582,157 @@ const connectNotify = () => {
 
 
 <style>
-/* 全局背景图：从头部下方开始显示 */
-.global-bg {
-  position: fixed;
-  top: 50px;
-  /* 与头部高度保持一致 */
-  left: 0;
-  width: 100vw;
-  height: calc(100vh - 50px);
-  /* 高度 = 屏幕高度 - 头部高度 */
-  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-  background-size: 400% 400%;
-  animation: gradient 15s ease infinite;
-  z-index: -999;
-  opacity: 0.2;
-}
+/* ============================================================================
+   App shell · 荒天享物商城 —— 统一 clean blue-on-white 设计系统
+   依赖 src/assets/main.css 的 --mall-* 令牌；全局 mall-clean.css 兜底覆盖。
+   ============================================================================ */
 
-@keyframes gradient {
-  0% {
-    background-position: 0% 50%;
-  }
+/* 旧的彩虹渐变底层占位 —— 直接隐藏（页面各自铺浅灰底） */
+.global-bg { display: none; }
 
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* 头部样式：核心响应式布局基础 */
+/* ── 顶部固定头部 ───────────────────────────────────────────────────────── */
 .app-header {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 0 20px;
-  height: 60px;
-  /* 适中高度，兼顾触控体验 */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   position: fixed;
-  /* 修改为fixed定位 */
   top: 0;
-  /* 固定在顶部 */
   left: 0;
   right: 0;
   z-index: 1000;
-  /* 提高z-index确保在最上层 */
-  /* 确保在内容上方 */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
-  /* 更明显的阴影提升层次感 */
-  color: white;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  /* 创建伪元素作为背景 */
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  /* 添加背景色确保覆盖下方内容 */
+  height: 60px;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--mall-surface);
+  border-bottom: 1px solid var(--mall-border);
+  box-shadow: var(--mall-shadow);
+  color: var(--mall-text);
 }
 
-.app-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  z-index: -1;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  /* 添加轻微的纹理效果 */
-  background-size: 200% 200%;
-  animation: gradientShift 10s ease infinite;
-}
-
-@keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-
-  100% {
-    background-position: 0% 50%;
-  }
-}
-
-/* 左侧容器：弹性布局适配不同屏幕 */
 .header-left {
   display: flex;
   align-items: center;
-  gap: 20px;
-  /* 增加间距 */
+  gap: 14px;
   flex: 1;
-  /* 占据可用空间，防止溢出 */
   overflow: hidden;
-  /* 超出部分隐藏 */
 }
 
-/* 商城图标+名称样式 */
+/* 品牌 / 返回主页 */
 .mall-logo {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  white-space: nowrap;
-  /* 防止文字折行 */
   font-size: 18px;
-  color: white;
-  /* 白色文字提高可读性 */
+  font-weight: 700;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  color: var(--mall-text);
   cursor: pointer;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-  letter-spacing: 0.5px;
-  padding: 5px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(5px);
-  transition: all 0.3s;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: color 0.15s ease;
 }
 
 .mall-logo:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  color: var(--mall-primary);
 }
 
 .mall-logo .el-icon {
   font-size: 22px;
-  /* 图标适中大小 */
-  color: white;
-  /* 白色图标 */
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+  color: var(--mall-primary);
 }
 
-/* 右侧链接区域：弹性布局紧凑排列 */
+/* 右侧导航链接 */
 .header-right {
   display: flex;
   align-items: center;
-  gap: 15px;
-  /* 增加间距 */
-  padding: 0 10px;
+  gap: 6px;
 }
 
-/* 右侧链接样式统一 */
 .header-right .el-link,
 .header-link {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: var(--mall-radius-sm);
   font-size: 14px;
-  color: rgba(255, 255, 255, 1) !important;
-  text-decoration: none;
-  /* 去除默认下划线 */
-  transition: all 0.3s;
-  /* hover过渡效果 */
-  padding: 6px 12px;
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
   font-weight: 500;
-  letter-spacing: 0.5px;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  /* 添加内发光效果 */
-  position: relative;
-  overflow: hidden;
+  color: var(--mall-text-muted) !important;
+  text-decoration: none;
+  background: transparent;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-.header-right .el-link::before,
-.header-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  z-index: -1;
-}
-
-.header-right .el-link:hover::before,
-.header-link:hover::before {
-  opacity: 1;
-}
-
-.header-right el-link:hover,
+.header-right .el-link:hover,
 .header-link:hover {
-  color: white !important;
-  /*  hover时变色 */
-  background: rgba(255, 255, 255, 0.3);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
-  /* 增强悬停效果 */
-  border-color: rgba(255, 255, 255, 0.4);
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  background: var(--mall-surface-muted);
+  color: var(--mall-primary) !important;
 }
 
 .header-right .el-icon {
-  font-size: 18px;
-  /* 图标统一大小 */
-  color: white;
+  font-size: 16px;
+  color: inherit;
 }
 
-/* 消息徽章样式优化 */
+/* 消息徽章（红点用语义危险红，不与价格红混用） */
 .el-badge.item {
   vertical-align: middle;
 }
 
 .el-badge__content {
-  background-color: #ff4d4f !important;
+  background-color: var(--mall-danger) !important;
   border: 1px solid #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* 用户名触发区域 */
+/* 用户名触发按钮 */
 .username-trigger {
   white-space: nowrap;
 }
 
 .username-trigger .el-button {
-  padding: 8px 15px;
+  height: 36px;
+  padding: 0 12px;
   font-size: 14px;
-  color: white;
-  background: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 20px;
-  transition: all 0.3s;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+  color: var(--mall-text);
+  background: var(--mall-surface);
+  border: 1px solid var(--mall-border);
+  border-radius: var(--mall-radius-sm);
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .username-trigger .el-button:hover {
-  background: rgba(255, 255, 255, 0.25);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  background: var(--mall-surface-muted);
+  border-color: var(--mall-border-strong);
 }
 
-/* 用户信息弹窗样式 */
+.username-trigger .arrow-icon {
+  margin-left: 2px;
+}
+
+/* 用户信息弹窗 */
 .user-card {
-  padding: 15px;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e4e7f4 100%);
-  border-radius: 10px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  padding: 14px;
+  border: 1px solid var(--mall-border);
+  border-radius: var(--mall-radius);
+  background: var(--mall-surface);
+  box-shadow: var(--mall-shadow-hover);
 }
 
 .avatar-container {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .avatar {
   cursor: pointer;
-  transition: transform 0.3s;
-  border: 3px solid #fff;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid var(--mall-border);
+  transition: transform 0.15s ease;
 }
 
 .avatar:hover {
-  transform: scale(1.1);
-  /* 更明显的放大效果 */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  transform: scale(1.04);
 }
 
 .user-info {
@@ -863,203 +742,109 @@ const connectNotify = () => {
 .nickname {
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 5px;
-  color: #333;
+  margin-bottom: 4px;
+  color: var(--mall-text);
 }
 
 .username {
-  font-size: 14px;
-  color: #666;
+  font-size: 13px;
+  color: var(--mall-text-muted);
 }
 
 .action-buttons {
   display: flex;
   justify-content: space-around;
-  padding-top: 5px;
-  border-top: 1px solid #f0f0f0;
+  padding-top: 10px;
+  border-top: 1px solid var(--mall-border);
 }
 
 .action-btn {
   font-size: 14px;
-  color: #666;
-  transition: all 0.3s;
+  color: var(--mall-text-muted);
   padding: 6px 12px;
-  border-radius: 6px;
+  border-radius: var(--mall-radius-sm);
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 .action-btn:hover {
-  background-color: #f0f2f5;
-  transform: translateY(-1px);
+  background-color: var(--mall-surface-muted);
+  color: var(--mall-text);
 }
 
 .logout-btn {
-  color: #f56c6c;
-  /* 退出按钮红色强调 */
+  color: var(--mall-danger);
   font-weight: 500;
-  transition: all 0.3s;
 }
 
 .logout-btn:hover {
-  color: #ff4d4f;
-  background-color: #fef0f0;
-  transform: translateY(-1px);
+  color: var(--mall-danger);
+  background-color: #fef2f2;
 }
 
-/* 所有页面内容区域统一顶部偏移，避免被 fixed header(60px) 遮挡 */
+/* 内容区让出固定头部高度 */
 .page-content {
   padding-top: 60px;
 }
 
-/* 主内容区域样式 */
+/* 子布局主区（商家/用户中心 el-main）顶部偏移 */
 .main {
-  margin-top: 70px;
-  /* 增加顶部边距，防止被header遮挡 */
-  padding: 20px;
+  margin-top: 60px;
+  padding: 0;
 }
 
-/* 响应式适配：平板及以下（最大宽度768px） */
-@media (max-width: 768px) {
-  .app-header {
-    padding: 0 15px;
-    height: 55px;
-  }
-
-  .header-left {
-    gap: 12px;
-  }
-
-  /* 隐藏次要文字，保留核心图标 */
-  .header-right .el-link span:not(.el-badge__content) {
-    display: none;
-  }
-
-  .header-link {
-    font-size: 13px;
-    padding: 5px 10px;
-  }
-
-  .header-right {
-    gap: 8px;
-  }
-
-  /* 简化商城名称显示 */
-  .mall-logo span {
-    font-size: 16px;
-  }
-
-  .mall-logo .el-icon {
-    font-size: 20px;
-  }
-
-  /* 调整用户弹窗布局 */
-  .avatar-container {
-    flex-direction: column;
-    text-align: center;
-    gap: 10px;
-  }
-
-  .user-info {
-    text-align: center;
-  }
-
-  .nickname {
-    font-size: 15px;
-  }
-
-  .username {
-    font-size: 13px;
-  }
-}
-
-/* 响应式适配：手机小屏幕（最大宽度480px） */
-@media (max-width: 480px) {
-  .header-left {
-    gap: 8px;
-  }
-
-  /* 隐藏"返回主页"的文字，只保留图标 */
-  .mall-logo:first-child span {
-    display: none;
-  }
-
-  .mall-logo:first-child .el-icon {
-    font-size: 20px;
-    /* 放大图标提升辨识度 */
-  }
-
-  /* 进一步简化右侧图标间距 */
-  .header-right {
-    gap: 8px;
-  }
-
-  .header-right .el-icon {
-    font-size: 18px;
-    /* 放大图标，便于点击 */
-  }
-
-  /* 隐藏用户名文本，只保留头像触发 */
-  .username-trigger .el-button span:first-child {
-    display: none;
-  }
-
-  /* 弹窗按钮文字缩小 */
-  .action-btn {
-    font-size: 12px;
-  }
-}
-
-/* 解决移动端点击元素高亮问题 */
+/* 移动端点击高亮 */
 * {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* 自定义通知样式 */
+/* ── 实时通知卡片 ───────────────────────────────────────────────────────── */
 .custom-notification {
-  border-left: 5px solid #409eff !important;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
-  border-radius: 8px !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
-  backdrop-filter: blur(10px);
+  border-left: 4px solid var(--mall-primary) !important;
+  background: var(--mall-surface) !important;
+  border-radius: var(--mall-radius) !important;
+  box-shadow: var(--mall-shadow-hover) !important;
 }
 
 .custom-notification .el-notification__title {
   font-weight: 600;
-  color: #333;
+  color: var(--mall-text);
   font-size: 16px;
 }
 
 .custom-notification .el-notification__content {
-  color: #666;
+  color: var(--mall-text-muted);
   font-size: 14px;
   margin-top: 8px;
 }
 
 .custom-notification.success {
-  border-left-color: #67c23a !important;
+  border-left-color: var(--mall-success) !important;
 }
 
 .custom-notification.info {
-  border-left-color: #409eff !important;
+  border-left-color: var(--mall-primary) !important;
 }
 
 .custom-notification.warning {
-  border-left-color: #e6a23c !important;
+  border-left-color: var(--mall-warning) !important;
 }
 
 .custom-notification.error {
-  border-left-color: #f56c6c !important;
+  border-left-color: var(--mall-danger) !important;
 }
 
-/* 右侧边栏样式 */
+/* ── 右侧抽屉边栏 ───────────────────────────────────────────────────────── */
 .sidebar {
   position: fixed;
   right: -180px;
   top: 50%;
   transform: translateY(-50%);
   width: 180px;
-  background: #ffffff;
+  background: var(--mall-surface);
+  border: 1px solid var(--mall-border);
+  border-right: none;
   border-radius: 8px 0 0 8px;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--mall-shadow-hover);
   z-index: 100;
   overflow: visible;
   transition: right 0.3s ease;
@@ -1069,7 +854,6 @@ const connectNotify = () => {
   right: 0;
 }
 
-/* 侧边栏遮罩层 */
 .sidebar-overlay {
   position: fixed;
   top: 0;
@@ -1081,7 +865,6 @@ const connectNotify = () => {
   cursor: pointer;
 }
 
-/* 折叠/展开按钮 */
 .sidebar-toggle {
   position: absolute;
   left: -32px;
@@ -1092,7 +875,6 @@ const connectNotify = () => {
   border: 1px solid var(--mall-border);
   border-right: none;
   background: var(--mall-surface);
-  background-image: none;
   border-radius: 8px 0 0 8px;
   box-shadow: -2px 0 8px rgba(15, 23, 42, 0.06);
   display: flex;
@@ -1103,31 +885,14 @@ const connectNotify = () => {
   z-index: 101;
 }
 
-.sidebar-toggle:hover,
-.sidebar-toggle:active,
-.sidebar-toggle:focus-visible {
+.sidebar-toggle:hover {
   background: var(--mall-surface-muted);
   border-color: var(--mall-border-strong);
-  background-image: none;
-  box-shadow: -2px 0 12px rgba(15, 23, 42, 0.1);
-  transform: translateY(-50%);
-  outline: none;
-}
-
-.sidebar.expanded .sidebar-toggle,
-.sidebar.expanded .sidebar-toggle:hover {
-  background: var(--mall-surface-muted);
-  border-color: var(--mall-border-strong);
-  background-image: none;
-  box-shadow: none;
-  transform: translateY(-50%);
-  outline: none;
 }
 
 .sidebar-toggle .el-icon {
   font-size: 18px;
   color: var(--mall-text-muted);
-  font-weight: bold;
 }
 
 .sidebar-content {
@@ -1146,156 +911,7 @@ const connectNotify = () => {
   margin-right: 8px;
 }
 
-/* 签到日历对话框样式 */
-.calendar-container {
-  padding: 20px;
-}
-
-/* 签到统计 */
-.sign-stats {
-  display: flex;
-  justify-content: space-around;
-  margin-bottom: 30px;
-  padding: 20px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 12px;
-  color: white;
-}
-
-.stat-item {
-  text-align: center;
-}
-
-.stat-value {
-  font-size: 32px;
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.stat-label {
-  font-size: 14px;
-  opacity: 0.9;
-}
-
-.stat-item .el-button {
-  margin-top: 10px;
-}
-
-/* 日历头部 */
-.calendar-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  padding: 0 10px;
-}
-
-.month-text {
-  font-size: 18px;
-  font-weight: 500;
-  color: #333;
-}
-
-/* 星期标题 */
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-  margin-bottom: 10px;
-  padding: 10px 0;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.weekday {
-  text-align: center;
-  font-size: 14px;
-  color: #666;
-  font-weight: 500;
-}
-
-/* 日历主体 */
-.calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: 5px;
-}
-
-.calendar-day {
-  position: relative;
-  aspect-ratio: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.calendar-day.is-empty {
-  cursor: default;
-}
-
-.calendar-day.is-today {
-  background: linear-gradient(135deg, #409eff 0%, #66b1ff 100%);
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 2px 8px rgba(64, 158, 255, 0.4);
-  border: 2px solid #409eff;
-}
-
-.calendar-day.is-today::before {
-  content: '今';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  font-size: 10px;
-  background: rgba(255, 255, 255, 0.9);
-  color: #409eff;
-  padding: 1px 3px;
-  border-radius: 3px;
-  font-weight: bold;
-}
-
-.calendar-day.is-signed {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  font-weight: bold;
-}
-
-/* 今天且已签到：同时显示两种标记 */
-.calendar-day.is-today.is-signed {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: 2px solid #409eff;
-  box-shadow: 0 2px 12px rgba(64, 158, 255, 0.6), 0 0 0 3px rgba(64, 158, 255, 0.2);
-}
-
-.calendar-day.is-today.is-signed::before {
-  content: '今';
-  position: absolute;
-  top: 2px;
-  left: 2px;
-  font-size: 10px;
-  background: rgba(255, 255, 255, 0.95);
-  color: #667eea;
-  padding: 1px 3px;
-  border-radius: 3px;
-  font-weight: bold;
-}
-
-.calendar-day.is-signed:hover {
-  transform: scale(1.05);
-}
-
-.sign-icon {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  font-size: 12px;
-}
-
-/* 签到日历：统一为信息型商城风格 */
+/* ── 签到日历对话框 ─────────────────────────────────────────────────────── */
 .sign-calendar-dialog {
   border-radius: var(--mall-radius);
 }
@@ -1326,15 +942,13 @@ const connectNotify = () => {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
   margin-bottom: 20px;
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
   color: var(--mall-text);
 }
 
 .stat-item {
   min-height: 78px;
   padding: 14px;
+  text-align: center;
   border: 1px solid var(--mall-border);
   border-radius: var(--mall-radius);
   background: var(--mall-surface-muted);
@@ -1344,12 +958,13 @@ const connectNotify = () => {
   margin-bottom: 4px;
   color: var(--mall-primary);
   font-size: 26px;
+  font-weight: 700;
   line-height: 1;
 }
 
 .stat-label {
   color: var(--mall-text-muted);
-  opacity: 1;
+  font-size: 14px;
 }
 
 .stat-item .el-button {
@@ -1358,8 +973,10 @@ const connectNotify = () => {
 }
 
 .calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 12px;
-  padding: 0;
 }
 
 .calendar-header .el-button {
@@ -1382,6 +999,8 @@ const connectNotify = () => {
 }
 
 .calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: 6px;
   margin-bottom: 8px;
   padding: 8px 0;
@@ -1389,38 +1008,59 @@ const connectNotify = () => {
 }
 
 .weekday {
+  text-align: center;
+  font-size: 14px;
   color: var(--mall-text-muted);
   font-weight: 600;
 }
 
 .calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
   gap: 6px;
 }
 
 .calendar-day {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   border: 1px solid transparent;
   border-radius: 6px;
+  font-size: 14px;
   color: var(--mall-text);
+  cursor: pointer;
   transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+}
+
+.calendar-day.is-empty {
+  cursor: default;
 }
 
 .calendar-day:hover:not(.is-empty) {
   border-color: var(--mall-border);
   background: var(--mall-surface-muted);
-  transform: none;
 }
 
 .calendar-day.is-today {
-  border: 1px solid #bcd4ff;
-  background: #eef5ff;
+  border: 1px solid var(--mall-accent-border);
+  background: var(--mall-accent-bg);
   color: var(--mall-primary);
-  box-shadow: none;
+  font-weight: 700;
 }
 
-.calendar-day.is-today::before,
-.calendar-day.is-today.is-signed::before {
+.calendar-day.is-today::before {
+  content: '今';
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: 10px;
   background: var(--mall-primary);
   color: #fff;
+  padding: 1px 3px;
+  border-radius: 3px;
+  font-weight: bold;
 }
 
 .calendar-day.is-signed,
@@ -1428,18 +1068,24 @@ const connectNotify = () => {
   border: 1px solid #b7e4c7;
   background: #f0fdf4;
   color: var(--mall-success);
-  box-shadow: none;
+  font-weight: 700;
 }
 
-.calendar-day.is-signed:hover {
-  transform: none;
+.calendar-day.is-today.is-signed::before {
+  content: '今';
+  background: var(--mall-success);
+  color: #fff;
 }
 
 .sign-icon {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  font-size: 12px;
   color: var(--mall-success);
 }
 
-/* 响应式适配 */
+/* ── 响应式 ─────────────────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .sidebar {
     width: 60px;
@@ -1461,6 +1107,36 @@ const connectNotify = () => {
 }
 
 @media (max-width: 768px) {
+  .app-header {
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .page-content {
+    padding-top: 56px;
+  }
+
+  .main {
+    margin-top: 56px;
+  }
+
+  .header-left {
+    gap: 10px;
+  }
+
+  .header-right {
+    gap: 4px;
+  }
+
+  .header-right .el-link span:not(.el-badge__content),
+  .header-link span:not(.el-badge__content) {
+    display: none;
+  }
+
+  .mall-logo span {
+    font-size: 16px;
+  }
+
   .sidebar {
     top: auto;
     bottom: 20px;
@@ -1478,167 +1154,24 @@ const connectNotify = () => {
     width: 28px;
     height: 52px;
   }
-}
 
-/* Marketplace visual reset: keep the app useful and retail-focused. */
-.global-bg {
-  display: none;
-}
-
-.app-header {
-  height: 60px;
-  border-bottom: 1px solid var(--mall-border);
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: none;
-  color: var(--mall-text);
-  text-shadow: none;
-  backdrop-filter: blur(10px);
-}
-
-.app-header::before {
-  display: none;
-}
-
-.header-left {
-  gap: 14px;
-}
-
-.mall-logo {
-  gap: 7px;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-  color: var(--mall-text);
-  text-shadow: none;
-  letter-spacing: 0;
-}
-
-.mall-logo:hover {
-  background: transparent;
-  box-shadow: none;
-  color: var(--mall-primary);
-  transform: none;
-}
-
-.mall-logo .el-icon {
-  color: var(--mall-primary);
-  filter: none;
-}
-
-.header-right {
-  gap: 6px;
-}
-
-.header-right .el-link,
-.header-link {
-  padding: 7px 10px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  box-shadow: none;
-  color: var(--mall-text-muted) !important;
-  text-shadow: none;
-  letter-spacing: 0;
-  backdrop-filter: none;
-}
-
-.header-right .el-link::before,
-.header-link::before {
-  display: none;
-}
-
-.header-right .el-link:hover,
-.header-link:hover {
-  border-color: transparent;
-  background: var(--mall-surface-muted);
-  box-shadow: none;
-  color: var(--mall-text) !important;
-  text-shadow: none;
-  transform: none;
-}
-
-.header-right .el-icon {
-  color: currentColor;
-}
-
-.username-trigger .el-button {
-  border: 1px solid var(--mall-border);
-  border-radius: 6px;
-  background: var(--mall-surface);
-  color: var(--mall-text);
-  text-shadow: none;
-}
-
-.username-trigger .el-button:hover {
-  border-color: var(--mall-border-strong);
-  background: var(--mall-surface-muted);
-  box-shadow: none;
-  transform: none;
-}
-
-.user-card {
-  border: 1px solid var(--mall-border);
-  border-radius: var(--mall-radius);
-  background: var(--mall-surface);
-  box-shadow: var(--mall-shadow-hover);
-}
-
-.avatar {
-  border: 1px solid var(--mall-border);
-  box-shadow: none;
-}
-
-.avatar:hover,
-.action-btn:hover,
-.logout-btn:hover {
-  box-shadow: none;
-  transform: none;
-}
-
-.main {
-  margin-top: 60px;
-  padding: 0;
-}
-
-.sidebar {
-  border-right: 1px solid var(--mall-border);
-  box-shadow: none;
-}
-
-.sidebar-toggle {
-  border: 1px solid var(--mall-border);
-  border-right: none;
-  background: var(--mall-surface) !important;
-  background-image: none !important;
-  box-shadow: -2px 0 8px rgba(15, 23, 42, 0.06);
-}
-
-.sidebar-toggle:hover {
-  background: var(--mall-surface-muted) !important;
-  background-image: none !important;
-  border-color: var(--mall-border-strong);
-  box-shadow: -2px 0 12px rgba(15, 23, 42, 0.1) !important;
-  transform: translateY(-50%) !important;
-}
-
-.sidebar-toggle .el-icon {
-  color: var(--mall-text-muted) !important;
-}
-
-@media (max-width: 768px) {
-  .app-header {
-    height: 56px;
-    padding: 0 12px;
+  .avatar-container {
+    flex-direction: column;
+    text-align: center;
   }
 
-  .main {
-    margin-top: 56px;
+  .user-info {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .mall-logo:first-child span {
+    display: none;
   }
 
-  .header-right {
-    gap: 4px;
+  .username-trigger .el-button span:first-child {
+    display: none;
   }
 }
 </style>

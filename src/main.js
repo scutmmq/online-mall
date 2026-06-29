@@ -11,7 +11,7 @@ import router from "./router/router.js"
 
 import { createApp } from 'vue'
 import App from './App.vue'
-
+import '@/assets/mall-clean.css'
 // 4.创建vue实例
 const app = createApp(App);
 

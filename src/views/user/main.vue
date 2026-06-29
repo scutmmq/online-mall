@@ -98,62 +98,24 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* ============================================================================
+   用户首页 · 荒天享物商城 —— clean blue-on-white 设计系统
+   ============================================================================ */
 .user-home {
-    padding: 20px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
     min-height: 100%;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    animation: fadeInUp 0.5s ease-out;
-    position: relative;
-    overflow: hidden;
-}
-
-.user-home::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
-    z-index: -1;
 }
 
 .user-card {
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(102, 126, 234, 0.1);
-    animation: slideInLeft 0.5s ease-out;
-    position: relative;
-    overflow: hidden;
-}
-
-.user-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    transform: scaleX(0);
-    transition: transform 0.3s ease;
-    transform-origin: left;
-}
-
-.user-card:hover::before {
-    transform: scaleX(1);
+    border: 1px solid var(--mall-border);
+    border-radius: var(--mall-radius);
+    background: var(--mall-surface);
+    box-shadow: var(--mall-shadow);
 }
 
 .user-info-container {
     display: flex;
-    padding: 30px;
     gap: 40px;
-    position: relative;
+    padding: 30px;
 }
 
 .avatar-section {
@@ -164,32 +126,13 @@ onMounted(() => {
 }
 
 .user-avatar {
-    border: 4px solid rgba(102, 126, 234, 0.2);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-    position: relative;
+    border: 1px solid var(--mall-border);
+    transition: transform 0.2s ease;
     overflow: hidden;
 }
 
-.user-avatar::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
-    border-radius: 50%;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-
 .user-avatar:hover {
-    transform: scale(1.05);
-}
-
-.user-avatar:hover::before {
-    opacity: 1;
+    transform: scale(1.04);
 }
 
 .avatar-img {
@@ -200,47 +143,30 @@ onMounted(() => {
 
 .info-list {
     flex: 1;
+    min-width: 0;
 }
 
 .title {
-    margin: 0 0 25px 0;
+    margin: 0 0 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--mall-border);
+    color: var(--mall-text);
     font-size: 20px;
-    color: #333;
-    font-weight: 600;
-    padding-bottom: 15px;
-    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
-    position: relative;
+    font-weight: 700;
 }
 
-.title::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
-    border-radius: 2px;
-}
-
-/* 自定义描述列表样式 */
-:deep(.el-descriptions__body) {
-    background: rgba(255, 255, 255, 0.7) !important;
-    border-radius: 8px !important;
-    border: 1px solid rgba(102, 126, 234, 0.1) !important;
-}
-
+/* 描述列表 */
 :deep(.el-descriptions__label) {
-    background: rgba(102, 126, 234, 0.05) !important;
-    font-weight: 500 !important;
-    color: #555 !important;
+    background: var(--mall-surface-muted) !important;
+    color: var(--mall-text-muted) !important;
+    font-weight: 600 !important;
 }
 
 :deep(.el-descriptions__content) {
-    color: #333 !important;
+    color: var(--mall-text) !important;
 }
 
-/* 适配小屏幕 */
+/* 响应式 */
 @media (max-width: 768px) {
     .user-info-container {
         flex-direction: column;
@@ -250,33 +176,6 @@ onMounted(() => {
 
     .info-list {
         width: 100%;
-    }
-    
-    .user-card {
-        margin: 10px;
-    }
-}
-
-/* 动画关键帧 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInLeft {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
     }
 }
 </style>

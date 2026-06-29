@@ -1,0 +1,45 @@
+/* ============================================================================
+   荒天享物商城 · Element Plus 主题对齐（商城蓝）
+   ----------------------------------------------------------------------------
+   用法：保存为 src/assets/element-theme.css，并在 src/main.js 里
+         【在 element-plus 样式之后】引入：
+             import 'element-plus/dist/index.css'
+             import '@/assets/element-theme.css'   // ← 加这行
+   作用：让所有 el-button[type=primary]、el-radio-button 选中态、
+         el-checkbox、链接、分页等自动使用商城蓝，省去逐个改。
+   ============================================================================ */
+
+:root {
+  /* 主色 = 商城蓝 #1f6feb */
+  --el-color-primary: #1f6feb;
+  --el-color-primary-light-3: #5891f1;
+  --el-color-primary-light-5: #8fb4f5;
+  --el-color-primary-light-7: #c0d6fa;
+  --el-color-primary-light-8: #d7e4fc;
+  --el-color-primary-light-9: #eef5ff;   /* = --mall-accent-bg */
+  --el-color-primary-dark-2: #1557c0;    /* = --mall-primary-hover */
+
+  /* 圆角与边框对齐设计系统 */
+  --el-border-radius-base: 6px;
+  --el-border-color: #e5e7eb;
+  --el-border-color-light: #e5e7eb;
+  --el-text-color-primary: #111827;
+  --el-text-color-regular: #6b7280;
+}
+
+/* 主按钮 hover 用更深的蓝 */
+.el-button--primary:hover,
+.el-button--primary:focus {
+  background-color: var(--el-color-primary-dark-2);
+  border-color: var(--el-color-primary-dark-2);
+}
+
+/* 选中态统一为 pale-blue pill 风格 */
+.el-radio-button__original-radio:checked + .el-radio-button__inner {
+  background-color: #eef5ff;
+  border-color: #bcd4ff;
+  color: #1f6feb;
+  box-shadow: -1px 0 0 0 #bcd4ff;
+}
+
+/* 价格类文字请勿用主色——价格固定红 #e4232b（在各 view 内单独写 .price 类） */

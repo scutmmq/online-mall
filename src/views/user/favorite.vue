@@ -29,7 +29,7 @@
 
                         <!-- 评分和商家 -->
                         <div class="product-footer">
-                            <span class="product-rating">⭐ {{ product.rating }}</span>
+                            <span class="product-rating"><el-icon><StarFilled /></el-icon>{{ product.rating }}</span>
                             <span class="product-merchant">{{ product.merchantName }}</span>
                         </div>
 
@@ -106,22 +106,19 @@ const toProductDetail = (productId) => {
 </script>
 
 <style scoped>
+/* ============================================================================
+   我的收藏 · 荒天享物商城 —— clean blue-on-white 设计系统
+   ============================================================================ */
 .liked-products-page {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    animation: fadeInUp 0.5s ease-out;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
 .page-header {
     margin-bottom: 20px;
     padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--mall-border);
 }
 
 .loading-container {
@@ -133,105 +130,92 @@ const toProductDetail = (productId) => {
     text-align: center;
 }
 
-/* 商品网格布局 */
+/* 商品网格 */
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 24px;
+    gap: 16px;
     margin-top: 20px;
 }
 
-/* 商品卡片样式 */
+/* 商品卡片 */
 .product-card {
-    border: 1px solid #eee;
-    border-radius: 12px;
-    padding: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
     position: relative;
-    background: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    backdrop-filter: blur(5px);
+    padding: 16px;
+    border: 1px solid var(--mall-border);
+    border-radius: var(--mall-radius);
+    background: var(--mall-surface);
+    box-shadow: var(--mall-shadow);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .product-card:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    border-color: var(--mall-border-strong);
+    box-shadow: var(--mall-shadow-hover);
     transform: translateY(-2px);
 }
 
-/* 商品图片 */
 .product-img {
     width: 100%;
     height: 200px;
-    border-radius: 8px;
+    border-radius: var(--mall-radius-sm);
     margin-bottom: 12px;
 }
 
-/* 商品名称 */
 .product-name {
-    font-size: 16px;
-    color: #333;
-    margin-bottom: 8px;
-    line-height: 1.4;
     height: 40px;
+    margin-bottom: 8px;
+    color: var(--mall-text);
+    font-size: 16px;
+    line-height: 1.4;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
 }
 
-/* 商品价格 */
 .product-price {
-    font-size: 18px;
-    color: #ff4d4f;
-    font-weight: 500;
     margin-bottom: 12px;
+    color: var(--mall-price);
+    font-size: 18px;
+    font-weight: 700;
 }
 
-/* 商品底部信息 */
 .product-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: var(--mall-text-muted);
     font-size: 12px;
-    color: #666;
 }
 
 .product-rating {
-    display: flex;
+    display: inline-flex;
     align-items: center;
+    gap: 3px;
 }
 
-/* 状态标签 */
+.product-rating .el-icon {
+    color: #f5a623;
+    font-size: 13px;
+}
+
 .status-tag {
     position: absolute;
     top: 16px;
     right: 16px;
 }
 
-/* 动画关键帧 */
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* 响应式调整 */
+/* 响应式 */
 @media (max-width: 768px) {
     .liked-products-page {
-        margin: 10px auto;
-        padding: 15px;
-        border-radius: 8px;
+        padding: 16px;
     }
 
     .products-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 16px;
+        gap: 12px;
     }
 
     .product-img {
@@ -240,7 +224,6 @@ const toProductDetail = (productId) => {
 
     .product-card {
         padding: 12px;
-        border-radius: 8px;
     }
 }
 </style>

@@ -290,7 +290,8 @@ const goToDetail = (productId) => {
 }
 
 .search-input {
-  display: block;
+  display: flex;
+  width: 100%;
 }
 
 .search-input :deep(.el-input__wrapper) {

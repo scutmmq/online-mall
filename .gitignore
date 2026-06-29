@@ -24,6 +24,10 @@ coverage
 *.sln
 *.sw?
 
+# AI agent / IDE config (local to each developer)
+.claude/
+.qoder/
+
 *.tsbuildinfo
 
 .eslintcache

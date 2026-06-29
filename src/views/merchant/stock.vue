@@ -352,12 +352,12 @@ onMounted(() => {
 }
 
 :deep(.el-table .el-button) {
-    color: #1890ff;
+    color: var(--mall-primary);
     cursor: pointer;
 }
 
 :deep(.el-table .el-button:hover) {
-    color: #40a9ff;
+    color: var(--mall-primary-hover);
     text-decoration: underline;
 }
 </style>

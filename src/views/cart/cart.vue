@@ -16,7 +16,7 @@
 
                     <!-- 商家商品列表 -->
                     <el-table :data="merchant.productList" border style="width: 100%; margin-bottom: 20px;"
-                        :header-cell-style="{ 'background-color': '#f5f5f5' }"
+                        :header-cell-style="{ 'background-color': 'var(--mall-surface-muted)' }"
                         @select="(selection, row) => handleProductSelect(selection, row, merchant)"
                         @select-all="(selection) => handleProductSelectAll(selection, merchant)"
                         :ref="(el) => merchant.tableRef = el">
@@ -60,7 +60,7 @@
                         <!-- 操作列 -->
                         <el-table-column label="操作" align="center">
                             <template #default="scope">
-                                <el-button type="text" text-color="#ff4d4f"
+                                <el-button type="text" class="remove-btn"
                                     @click="handleRemove(scope.row.cartItemsId, merchant)">
                                     删除
                                 </el-button>
@@ -569,7 +569,9 @@ const submitOrder = async () => {
 </script>
 
 <style scoped>
-/* 基础样式 */
+/* ============================================================================
+   购物车 · 荒天享物商城 —— clean blue-on-white 设计系统
+   ============================================================================ */
 .cart-page {
     max-width: 1200px;
     margin: 0 auto;
@@ -580,20 +582,22 @@ const submitOrder = async () => {
     margin-top: 20px;
 }
 
-/* 商家分组样式 */
+/* 商家分组卡片 */
 .merchant-group {
-    margin-bottom: 30px;
-    border: 1px solid #eee;
-    border-radius: 8px;
+    margin-bottom: 18px;
+    border: 1px solid var(--mall-border);
+    border-radius: var(--mall-radius);
+    background: var(--mall-surface);
+    box-shadow: var(--mall-shadow);
     overflow: hidden;
 }
 
 .merchant-header {
-    padding: 12px 20px;
-    background-color: #f9f9f9;
-    border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
+    padding: 12px 18px;
+    background: var(--mall-surface-muted);
+    border-bottom: 1px solid var(--mall-border);
 }
 
 .merchant-checkbox {
@@ -601,11 +605,11 @@ const submitOrder = async () => {
 }
 
 .merchant-name {
-    font-weight: 500;
-    color: #333;
+    color: var(--mall-text);
+    font-weight: 600;
 }
 
-/* 商品信息样式 */
+/* 商品信息 */
 .product-info {
     display: flex;
     align-items: center;
@@ -616,99 +620,111 @@ const submitOrder = async () => {
     width: 80px;
     height: 80px;
     margin-right: 15px;
-    border-radius: 4px;
+    border: 1px solid var(--mall-border);
+    border-radius: 6px;
 }
 
 .product-name {
-    color: #333;
+    color: var(--mall-text);
     line-height: 1.5;
     max-width: 280px;
     display: -webkit-box;
     -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
     overflow: hidden;
 }
 
 .subtotal {
-    color: #ff4d4f;
-    font-weight: 500;
+    color: var(--mall-price);
+    font-weight: 700;
 }
 
-/* 空购物车样式 */
+/* 删除按钮（语义危险红，不与价格红混用） */
+.remove-btn {
+    color: var(--mall-danger);
+}
+
+.remove-btn:hover {
+    color: var(--mall-danger);
+}
+
+/* 空购物车 */
 .empty-cart {
     margin: 50px 0;
 }
 
-/* 批量删除按钮 */
+/* 批量删除 */
 .batch-operation {
-    margin: 10px 0;
+    margin: 10px 0 18px;
     text-align: left;
 }
 
-/* 结算区域样式 */
+/* 结算栏 */
 .cart-footer {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 20px;
-    padding: 15px 20px;
-    background-color: #f5f5f5;
-    border-radius: 4px;
+    padding: 16px 20px;
+    border: 1px solid var(--mall-border);
+    border-radius: var(--mall-radius);
+    background: var(--mall-surface);
+    box-shadow: var(--mall-shadow);
 }
 
 .total-info {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .selected-count {
-    margin-right: 20px;
-    color: #666;
+    color: var(--mall-text-muted);
+    font-size: 13px;
 }
 
 .total-label {
-    font-size: 16px;
-    color: #666;
-    margin-right: 10px;
+    color: var(--mall-text-muted);
+    font-size: 15px;
 }
 
 .total-price {
-    font-size: 22px;
-    color: #ff4d4f;
-    font-weight: 600;
-    margin-right: 10px;
+    color: var(--mall-price);
+    font-size: 24px;
+    font-weight: 800;
 }
 
 .total-desc {
-    font-size: 14px;
-    color: #999;
+    color: var(--mall-text-subtle);
+    font-size: 12px;
 }
 
 .operate-buttons {
     display: flex;
-    gap: 15px;
+    gap: 12px;
 }
 
 .operate-buttons .el-button--primary {
     width: 140px;
 }
 
-/* 表格样式调整 */
+/* 表格选择列居中 */
 :deep(.el-table__column--selection .el-checkbox) {
     display: flex;
     justify-content: center;
 }
 
-/* 结算弹窗样式 */
+/* 结算弹窗 */
 .checkout-content {
     padding: 10px 0;
 }
 
 .section-title {
-    font-size: 15px;
-    font-weight: 500;
     margin-bottom: 12px;
-    color: #333;
+    color: var(--mall-text);
+    font-size: 15px;
+    font-weight: 700;
 }
 
 .address-list {
@@ -717,16 +733,20 @@ const submitOrder = async () => {
 
 .address-item {
     padding: 15px;
-    border: 1px solid #eee;
-    border-radius: 6px;
     margin-bottom: 10px;
+    border: 1px solid var(--mall-border);
+    border-radius: 6px;
     cursor: pointer;
-    transition: all 0.3s;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.address-item:hover {
+    border-color: var(--mall-border-strong);
 }
 
 .address-item.active {
-    border-color: #1989fa;
-    background-color: #f0f7ff;
+    border-color: var(--mall-accent-border);
+    background-color: var(--mall-accent-bg);
 }
 
 .addr-header {
@@ -736,42 +756,43 @@ const submitOrder = async () => {
 }
 
 .addr-name {
-    font-weight: 500;
     margin-right: 15px;
-    color: #333;
+    color: var(--mall-text);
+    font-weight: 600;
 }
 
 .addr-phone {
-    color: #666;
     margin-right: 10px;
+    color: var(--mall-text-muted);
 }
 
 .default-tag {
+    padding: 2px 8px;
+    border: 1px solid var(--mall-accent-border);
+    border-radius: 999px;
+    background: var(--mall-accent-bg);
+    color: var(--mall-primary);
     font-size: 12px;
-    color: #1989fa;
-    background-color: #e6f4ff;
-    padding: 2px 6px;
-    border-radius: 3px;
 }
 
 .addr-detail {
-    color: #666;
+    color: var(--mall-text-muted);
     line-height: 1.4;
 }
 
 .no-address {
     text-align: center;
     padding: 20px;
-    color: #999;
-    border: 1px dashed #eee;
+    border: 1px dashed var(--mall-border);
     border-radius: 6px;
+    color: var(--mall-text-subtle);
 }
 
 .remark-input {
     width: 100%;
 }
 
-/* 响应式样式 */
+/* 响应式 */
 @media (max-width: 768px) {
     .product-info {
         flex-direction: column;

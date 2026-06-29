@@ -227,12 +227,12 @@ onMounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(31, 111, 235, 0.05) 0%, rgba(31, 111, 235, 0.05) 100%);
     z-index: -1;
 }
 
 .card-header {
-    border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+    border-bottom: 2px solid rgba(31, 111, 235, 0.2);
     padding-bottom: 15px;
     position: relative;
 }
@@ -244,7 +244,7 @@ onMounted(() => {
     left: 0;
     width: 80px;
     height: 3px;
-    background: linear-gradient(90deg, #667eea, #764ba2);
+    background: linear-gradient(90deg, var(--mall-primary), var(--mall-primary-hover));
     border-radius: 2px;
 }
 
@@ -269,7 +269,7 @@ onMounted(() => {
     height: 120px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid rgba(102, 126, 234, 0.2);
+    border: 3px solid rgba(31, 111, 235, 0.2);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s;
     position: relative;
@@ -283,7 +283,7 @@ onMounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    background: linear-gradient(135deg, rgba(31, 111, 235, 0.1), rgba(31, 111, 235, 0.1));
     border-radius: 50%;
     opacity: 0;
     transition: opacity 0.3s;
@@ -307,7 +307,7 @@ onMounted(() => {
     justify-content: center;
     font-size: 28px;
     color: #8c8c8c;
-    border: 2px dashed rgba(102, 126, 234, 0.3);
+    border: 2px dashed rgba(31, 111, 235, 0.3);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: all 0.3s;
     position: relative;
@@ -331,10 +331,10 @@ onMounted(() => {
 }
 
 .avatar-uploader-icon:hover {
-    background: rgba(102, 126, 234, 0.1);
+    background: rgba(31, 111, 235, 0.1);
     transform: translateY(-2px);
     box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    border-color: rgba(102, 126, 234, 0.5);
+    border-color: rgba(31, 111, 235, 0.5);
 }
 
 .form-hint {
@@ -352,26 +352,26 @@ onMounted(() => {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(31, 111, 235, 0.2);
     transition: all 0.3s;
 }
 
 :deep(.el-input__wrapper:hover) {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.2);
+    border-color: rgba(31, 111, 235, 0.4);
 }
 
 :deep(.el-input__wrapper.is-focus) {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+    border-color: rgba(31, 111, 235, 0.5);
 }
 
 /* 自定义按钮样式 */
 :deep(.el-button--primary) {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, var(--mall-primary) 0%, var(--mall-primary-hover) 100%);
     border: none;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
     transition: all 0.3s;
     position: relative;
     overflow: hidden;
@@ -395,7 +395,7 @@ onMounted(() => {
 
 :deep(.el-button--primary:hover) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 15px rgba(31, 111, 235, 0.4);
 }
 
 :deep(.el-button) {
@@ -410,16 +410,16 @@ onMounted(() => {
 
 /* 自定义单选按钮样式 */
 :deep(.el-radio__inner) {
-    border-color: rgba(102, 126, 234, 0.3);
+    border-color: rgba(31, 111, 235, 0.3);
 }
 
 :deep(.el-radio__inner::after) {
-    background-color: #667eea;
+    background-color: var(--mall-primary);
 }
 
 :deep(.el-radio.is-checked .el-radio__inner) {
-    border-color: #667eea;
-    background-color: #667eea;
+    border-color: var(--mall-primary);
+    background-color: var(--mall-primary);
 }
 
 /* 自定义日期选择器样式 */
@@ -432,18 +432,18 @@ onMounted(() => {
     background: rgba(255, 255, 255, 0.8);
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    border: 1px solid rgba(102, 126, 234, 0.2);
+    border: 1px solid rgba(31, 111, 235, 0.2);
     transition: all 0.3s;
 }
 
 :deep(.el-textarea__inner:hover) {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
-    border-color: rgba(102, 126, 234, 0.4);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.2);
+    border-color: rgba(31, 111, 235, 0.4);
 }
 
 :deep(.el-textarea__inner:focus) {
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-    border-color: rgba(102, 126, 234, 0.5);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.3);
+    border-color: rgba(31, 111, 235, 0.5);
 }
 
 /* 适配小屏幕 */

@@ -1,0 +1,88 @@
+/* ============================================================================
+   荒天享物商城 · 全站统一覆盖样式（一次引入,对齐所有页面到设计系统）
+   ----------------------------------------------------------------------------
+   用法：保存为 src/assets/mall-clean.css,在 src/main.js 里【最后】引入:
+       import 'element-plus/dist/index.css'
+       import '@/assets/mall-clean.css'   // ← 放在所有样式之后
+   原理：用全局 + !important 覆盖各页面 <style scoped> 里残留的紫色 / 玻璃态 /
+        不一致的蓝红,统一到 --mall-* 令牌。scoped 规则默认不带 !important,
+        所以这里能稳定覆盖。依赖 src/assets/main.css 的 --mall-* 变量。
+   ============================================================================ */
+
+/* ── 0. 页面画布:去彩虹动画底,统一浅灰 ──────────────────────────────── */
+.global-bg { background: var(--mall-bg) !important; background-image: none !important; animation: none !important; opacity: 1 !important; }
+
+/* ── 1. 顶部头部(App.vue):紫渐变 → 白底 ─────────────────────────────── */
+.app-header { background: var(--mall-surface) !important; background-image: none !important; color: var(--mall-text) !important; text-shadow: none !important; border-bottom: 1px solid var(--mall-border) !important; box-shadow: var(--mall-shadow) !important; animation: none !important; }
+.app-header::before { display: none !important; }
+.mall-logo { background: transparent !important; border: 0 !important; backdrop-filter: none !important; color: var(--mall-text) !important; text-shadow: none !important; box-shadow: none !important; }
+.mall-logo:hover { background: var(--mall-surface-muted) !important; transform: none !important; box-shadow: none !important; }
+.mall-logo .el-icon { color: var(--mall-primary) !important; filter: none !important; }
+.header-right .el-link, .header-link { background: transparent !important; border: 0 !important; backdrop-filter: none !important; box-shadow: none !important; color: var(--mall-text-muted) !important; text-shadow: none !important; border-radius: var(--mall-radius-sm) !important; }
+.header-right .el-link::before, .header-link::before { display: none !important; }
+.header-right .el-link:hover, .header-link:hover { color: var(--mall-primary) !important; background: var(--mall-surface-muted) !important; transform: none !important; box-shadow: none !important; text-shadow: none !important; border-color: transparent !important; }
+.header-right .el-icon { color: inherit !important; }
+
+/* ── 2. 去玻璃态 / 紫渐变卡片(收藏页、用户首页等)────────────────────── */
+.liked-products-page, .user-home, .user-card,
+.product-card, .order-card, .address-page .el-card, .merchant-profile .el-card {
+  background: var(--mall-surface) !important;
+  background-image: none !important;
+  backdrop-filter: none !important;
+  animation: none !important;
+}
+/* 紫色顶条 / 紫色下划线（user/main.vue 等） */
+.user-card::before, .title::after { display: none !important; }
+.user-home { background: var(--mall-bg) !important; box-shadow: none !important; }
+.user-home::before { display: none !important; }
+.title { border-bottom-color: var(--mall-border) !important; color: var(--mall-text) !important; }
+
+/* ── 3. 卡片统一外观:白底 + 灰描边 + 8px 圆角 + 柔和阴影,hover 升起 ──── */
+.product-card, .liked-products-page .product-card {
+  border: 1px solid var(--mall-border) !important;
+  border-radius: var(--mall-radius) !important;
+  box-shadow: var(--mall-shadow) !important;
+  transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease !important;
+}
+.product-card:hover {
+  border-color: var(--mall-border-strong) !important;
+  box-shadow: var(--mall-shadow-hover) !important;
+  transform: translateY(-4px) !important;
+}
+
+/* ── 4. 价格统一为价格红 #e4232b（覆盖各页 #ff4d4f / 其它红）────────── */
+.price, .product-price, .total-price, .subtotal,
+.product-info .product-price, .order-footer .amount, .summary-value.amount {
+  color: var(--mall-price) !important;
+}
+
+/* ── 5. 选中态 / 标签统一为 pale-blue pill（覆盖 #1989fa / #1e90ff）──── */
+.address-item.active, .addr-item.active {
+  border-color: var(--mall-accent-border) !important;
+  background-color: var(--mall-accent-bg) !important;
+}
+.default-tag {
+  color: var(--mall-primary) !important;
+  background-color: var(--mall-accent-bg) !important;
+  border: 1px solid var(--mall-accent-border) !important;
+}
+
+/* ── 6. Element Plus 主题对齐（主色=商城蓝；同 element-theme.css）────── */
+:root {
+  --el-color-primary: #1f6feb;
+  --el-color-primary-light-3: #5891f1;
+  --el-color-primary-light-5: #8fb4f5;
+  --el-color-primary-light-7: #c0d6fa;
+  --el-color-primary-light-8: #d7e4fc;
+  --el-color-primary-light-9: #eef5ff;
+  --el-color-primary-dark-2: #1557c0;
+  --el-border-radius-base: 6px;
+  --el-border-color: #e5e7eb;
+  --el-text-color-primary: #111827;
+  --el-text-color-regular: #6b7280;
+}
+.el-button--primary:hover, .el-button--primary:focus { background-color: var(--el-color-primary-dark-2); border-color: var(--el-color-primary-dark-2); }
+.el-radio-button__original-radio:checked + .el-radio-button__inner { background-color: #eef5ff; border-color: #bcd4ff; color: #1f6feb; box-shadow: -1px 0 0 0 #bcd4ff; }
+
+/* ── 7. 自定义通知:去渐变白卡 ──────────────────────────────────────── */
+.custom-notification { background: var(--mall-surface) !important; background-image: none !important; backdrop-filter: none !important; border-radius: var(--mall-radius) !important; }

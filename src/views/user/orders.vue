@@ -1417,7 +1417,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     height: 200px;
-    background: linear-gradient(180deg, rgba(24, 144, 255, 0.05) 0%, transparent 100%);
+    background: linear-gradient(180deg, rgba(31, 111, 235, 0.05) 0%, transparent 100%);
     pointer-events: none;
     z-index: 0;
 }
@@ -1437,7 +1437,7 @@ onUnmounted(() => {
 
 .page-title {
     font-size: 28px;
-    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%);
+    background: linear-gradient(135deg, var(--mall-primary) 0%, #096dd9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -1446,7 +1446,7 @@ onUnmounted(() => {
     display: flex;
     align-items: center;
     letter-spacing: -0.5px;
-    text-shadow: 0 2px 4px rgba(24, 144, 255, 0.1);
+    text-shadow: 0 2px 4px rgba(31, 111, 235, 0.1);
 }
 
 .page-title::after {
@@ -1454,10 +1454,10 @@ onUnmounted(() => {
     display: inline-block;
     width: 4px;
     height: 24px;
-    background: linear-gradient(180deg, #1890ff 0%, #096dd9 100%);
+    background: linear-gradient(180deg, var(--mall-primary) 0%, #096dd9 100%);
     margin-left: 12px;
     border-radius: 2px;
-    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+    box-shadow: 0 2px 8px rgba(31, 111, 235, 0.3);
     animation: pulse-bar 2s ease-in-out infinite;
 }
 
@@ -1474,19 +1474,19 @@ onUnmounted(() => {
 
 .order-count {
     font-size: 14px;
-    color: #1890ff;
+    color: var(--mall-primary);
     background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
     padding: 8px 20px;
     border-radius: 24px;
-    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(24, 144, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(31, 111, 235, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(31, 111, 235, 0.1);
     font-weight: 600;
     transition: all 0.3s ease;
 }
 
 .order-count:hover {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.8);
 }
 
 /* 状态筛选栏 - 改为弹性布局，容纳单选组和售后按钮 - 升级渐变 */
@@ -1494,18 +1494,18 @@ onUnmounted(() => {
     background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
     padding: 20px;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(24, 144, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 16px rgba(31, 111, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
     margin-bottom: 28px;
     display: flex;
     align-items: center;
     gap: 16px;
-    border: 1px solid rgba(24, 144, 255, 0.05);
+    border: 1px solid rgba(31, 111, 235, 0.05);
     transition: all 0.3s ease;
     /* 单选组和售后按钮的间距 */
 }
 
 .status-filter:hover {
-    box-shadow: 0 6px 20px rgba(24, 144, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 20px rgba(31, 111, 235, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 /* 单选按钮组 - 弹性布局，自适应宽度 */
@@ -1537,7 +1537,7 @@ onUnmounted(() => {
 }
 
 .after-sale-btn {
-    color: #1890ff;
+    color: var(--mall-primary);
     font-size: 14px;
     font-weight: 600;
     display: flex;
@@ -1549,16 +1549,16 @@ onUnmounted(() => {
     border-radius: 20px;
     /* 与单选按钮圆角统一 */
     border: 1px solid transparent;
-    background: linear-gradient(135deg, rgba(24, 144, 255, 0.05) 0%, rgba(24, 144, 255, 0.02) 100%);
+    background: linear-gradient(135deg, rgba(31, 111, 235, 0.05) 0%, rgba(31, 111, 235, 0.02) 100%);
     transition: all 0.3s ease;
 }
 
 .after-sale-btn:hover {
     color: #096dd9;
-    background: linear-gradient(135deg, rgba(24, 144, 255, 0.12) 0%, rgba(24, 144, 255, 0.08) 100%);
-    border-color: rgba(24, 144, 255, 0.2);
+    background: linear-gradient(135deg, rgba(31, 111, 235, 0.12) 0%, rgba(31, 111, 235, 0.08) 100%);
+    border-color: rgba(31, 111, 235, 0.2);
     transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(24, 144, 255, 0.15);
+    box-shadow: 0 2px 8px rgba(31, 111, 235, 0.15);
 }
 
 /* 售后筛选提示样式 - 增强效果 */
@@ -1566,17 +1566,17 @@ onUnmounted(() => {
     background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
     padding: 16px 20px;
     border-radius: 16px;
-    box-shadow: 0 4px 16px rgba(24, 144, 255, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 4px 16px rgba(31, 111, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04);
     margin-bottom: 24px;
     display: flex;
     align-items: center;
     gap: 12px;
-    border: 1px solid rgba(24, 144, 255, 0.1);
+    border: 1px solid rgba(31, 111, 235, 0.1);
     transition: all 0.3s ease;
 }
 
 .after-sale-filter-tip:hover {
-    box-shadow: 0 6px 20px rgba(24, 144, 255, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 6px 20px rgba(31, 111, 235, 0.12), 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .after-sale-status-text {
@@ -1587,7 +1587,7 @@ onUnmounted(() => {
 
 .exit-after-sale-btn {
     margin-left: auto;
-    color: #1890ff !important;
+    color: var(--mall-primary) !important;
 }
 
 .exit-after-sale-btn:hover {
@@ -1606,7 +1606,7 @@ onUnmounted(() => {
 }
 
 .after-sale-reject {
-    color: #ff4d4f;
+    color: var(--mall-danger);
     background-color: rgba(255, 77, 79, 0.15);
 }
 
@@ -1622,7 +1622,7 @@ onUnmounted(() => {
 
 .loading-spinner {
     margin-bottom: 16px;
-    color: #1890ff;
+    color: var(--mall-primary);
     animation: spin 1.5s linear infinite;
 }
 
@@ -1662,7 +1662,7 @@ onUnmounted(() => {
 }
 
 .empty-action {
-    color: #1890ff;
+    color: var(--mall-primary);
     font-size: 14px;
 }
 
@@ -1681,10 +1681,10 @@ onUnmounted(() => {
     background: linear-gradient(135deg, #ffffff 0%, #fafbfc 100%);
     border-radius: 16px;
     padding: 28px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(24, 144, 255, 0.04);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06), 0 2px 8px rgba(31, 111, 235, 0.04);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    border: 1px solid rgba(24, 144, 255, 0.06);
+    border: 1px solid rgba(31, 111, 235, 0.06);
     overflow: hidden;
 }
 
@@ -1696,7 +1696,7 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     height: 3px;
-    background: linear-gradient(90deg, #1890ff 0%, #096dd9 50%, #1890ff 100%);
+    background: linear-gradient(90deg, var(--mall-primary) 0%, #096dd9 50%, var(--mall-primary) 100%);
     background-size: 200% 100%;
     animation: gradient-shift 3s ease infinite;
     opacity: 0;
@@ -1717,9 +1717,9 @@ onUnmounted(() => {
 }
 
 .order-card:hover {
-    box-shadow: 0 8px 28px rgba(24, 144, 255, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 28px rgba(31, 111, 235, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
     transform: translateY(-4px) scale(1.01);
-    border-color: rgba(24, 144, 255, 0.15);
+    border-color: rgba(31, 111, 235, 0.15);
 }
 
 /* 订单头部 */
@@ -1743,9 +1743,9 @@ onUnmounted(() => {
     margin-top: 12px;
     padding: 16px 20px;
     background: linear-gradient(135deg, #e8f7ff 0%, #d9f0ff 50%, #cde9ff 100%);
-    border-left: 4px solid #1890ff;
+    border-left: 4px solid var(--mall-primary);
     border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.15), inset 0 1px 2px rgba(255, 255, 255, 0.8);
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     overflow: hidden;
@@ -1767,7 +1767,7 @@ onUnmounted(() => {
 }
 
 .order-remark-section:hover {
-    box-shadow: 0 6px 18px rgba(24, 144, 255, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+    box-shadow: 0 6px 18px rgba(31, 111, 235, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.8);
     transform: translateX(4px) scale(1.01);
     border-left-width: 6px;
 }
@@ -1777,19 +1777,19 @@ onUnmounted(() => {
     align-items: center;
     gap: 6px;
     padding: 6px 14px;
-    background: linear-gradient(135deg, #1890ff 0%, #0e7cde 100%);
+    background: linear-gradient(135deg, var(--mall-primary) 0%, #0e7cde 100%);
     color: #fff;
     font-size: 13px;
     font-weight: 600;
     border-radius: 16px;
     margin-bottom: 10px;
-    box-shadow: 0 3px 8px rgba(24, 144, 255, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 8px rgba(31, 111, 235, 0.4), inset 0 -1px 2px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
 }
 
 .remark-tag:hover {
     transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(31, 111, 235, 0.5), inset 0 -1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .remark-tag i {
@@ -1800,7 +1800,7 @@ onUnmounted(() => {
     background-color: rgba(255, 255, 255, 0.7);
     padding: 10px 12px;
     border-radius: 6px;
-    border: 1px solid rgba(24, 144, 255, 0.2);
+    border: 1px solid rgba(31, 111, 235, 0.2);
 }
 
 .remark-text {
@@ -1845,7 +1845,7 @@ onUnmounted(() => {
 .order-deliver-time i,
 .order-cancel-time i,
 .order-after-sale-time i {
-    color: #1890ff;
+    color: var(--mall-primary);
     font-size: 14px;
 }
 
@@ -1861,12 +1861,12 @@ onUnmounted(() => {
 /* 正常倒计时（大于3分钟）- 蓝色 */
 .countdown-normal {
     background: linear-gradient(135deg, #e6f7ff 0%, #d9f0ff 100%);
-    color: #1890ff;
-    border-left: 3px solid #1890ff;
+    color: var(--mall-primary);
+    border-left: 3px solid var(--mall-primary);
 }
 
 .countdown-normal i {
-    color: #1890ff;
+    color: var(--mall-primary);
 }
 
 /* 警告倒计时（1-3分钟）- 橙色 */
@@ -1957,7 +1957,7 @@ onUnmounted(() => {
 }
 
 .after-sale-section-title i {
-    color: #1890ff;
+    color: var(--mall-primary);
 }
 
 .after-sale-detail {
@@ -2034,7 +2034,7 @@ onUnmounted(() => {
 }
 
 .address-section-title i {
-    color: #1890ff;
+    color: var(--mall-primary);
 }
 
 .address-card {
@@ -2059,7 +2059,7 @@ onUnmounted(() => {
 }
 
 .address-card-header i {
-    color: #1890ff;
+    color: var(--mall-primary);
 }
 
 .address-group {
@@ -2126,7 +2126,7 @@ onUnmounted(() => {
 }
 
 .product-section-title i {
-    color: #1890ff;
+    color: var(--mall-primary);
 }
 
 .product-item {
@@ -2154,7 +2154,7 @@ onUnmounted(() => {
     margin-right: 16px;
     flex-shrink: 0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-    border: 2px solid rgba(24, 144, 255, 0.1);
+    border: 2px solid rgba(31, 111, 235, 0.1);
     position: relative;
     transition: all 0.3s ease;
 }
@@ -2166,14 +2166,14 @@ onUnmounted(() => {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(24, 144, 255, 0.1) 0%, transparent 100%);
+    background: linear-gradient(135deg, rgba(31, 111, 235, 0.1) 0%, transparent 100%);
     opacity: 0;
     transition: opacity 0.3s ease;
 }
 
 .product-item:hover .product-img-wrapper {
-    box-shadow: 0 6px 16px rgba(24, 144, 255, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.5);
-    border-color: rgba(24, 144, 255, 0.3);
+    box-shadow: 0 6px 16px rgba(31, 111, 235, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.5);
+    border-color: rgba(31, 111, 235, 0.3);
 }
 
 .product-item:hover .product-img-wrapper::after {
@@ -2207,7 +2207,7 @@ onUnmounted(() => {
 
 .product-price {
     font-size: 14px;
-    color: #ff4d4f;
+    color: var(--mall-price);
     font-weight: 500;
 }
 
@@ -2256,7 +2256,7 @@ onUnmounted(() => {
 }
 
 .amount {
-    color: #ff4d4f;
+    color: var(--mall-price);
     font-size: 18px;
     font-weight: 600;
 }
@@ -2274,9 +2274,9 @@ onUnmounted(() => {
 }
 
 .primary-btn {
-    background: linear-gradient(135deg, #1890ff 0%, #096dd9 100%) !important;
+    background: linear-gradient(135deg, var(--mall-primary) 0%, #096dd9 100%) !important;
     border-color: transparent !important;
-    box-shadow: 0 3px 8px rgba(24, 144, 255, 0.3) !important;
+    box-shadow: 0 3px 8px rgba(31, 111, 235, 0.3) !important;
     font-weight: 600 !important;
     position: relative !important;
     overflow: hidden !important;
@@ -2302,12 +2302,12 @@ onUnmounted(() => {
 
 .primary-btn:hover {
     background: linear-gradient(135deg, #0e7cde 0%, #085bb5 100%) !important;
-    box-shadow: 0 5px 14px rgba(24, 144, 255, 0.45) !important;
+    box-shadow: 0 5px 14px rgba(31, 111, 235, 0.45) !important;
     transform: translateY(-2px) !important;
 }
 
 .cancel-btn {
-    color: #ff4d4f !important;
+    color: var(--mall-danger) !important;
 }
 
 .cancel-btn:hover {
@@ -2316,12 +2316,12 @@ onUnmounted(() => {
 }
 
 .return-btn {
-    color: #1890ff !important;
+    color: var(--mall-primary) !important;
 }
 
 .return-btn:hover {
     color: #096dd9 !important;
-    background-color: rgba(24, 144, 255, 0.06) !important;
+    background-color: rgba(31, 111, 235, 0.06) !important;
 }
 
 .confirm-btn {
@@ -2370,8 +2370,8 @@ onUnmounted(() => {
 }
 
 .status-paid {
-    color: #1890ff;
-    background-color: rgba(24, 144, 255, 0.15);
+    color: var(--mall-primary);
+    background-color: rgba(31, 111, 235, 0.15);
 }
 
 .status-shipped {
@@ -2395,14 +2395,14 @@ onUnmounted(() => {
 }
 
 .status-refunded {
-    color: #ff4d4f;
+    color: var(--mall-danger);
     background-color: rgba(255, 77, 79, 0.15);
 }
 
 /* MessageBox 按钮样式 */
 :deep(.confirm-danger-btn) {
-    background-color: #ff4d4f !important;
-    border-color: #ff4d4f !important;
+    background-color: var(--mall-danger) !important;
+    border-color: var(--mall-danger) !important;
 }
 
 :deep(.confirm-warning-btn) {
@@ -2436,8 +2436,8 @@ onUnmounted(() => {
 }
 
 :deep(.cancel-safe-btn:hover) {
-    color: #1890ff !important;
-    border-color: #1890ff !important;
+    color: var(--mall-primary) !important;
+    border-color: var(--mall-primary) !important;
 }
 
 /* 退货弹窗样式 */
