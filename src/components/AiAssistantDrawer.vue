@@ -2,13 +2,7 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount, watch } from "vue";
 import { useRouter } from "vue-router";
 import { ElMessage, ElMessageBox } from "element-plus";
-import {
-    aiChatApi,
-    aiListSessionsApi,
-    aiListMessagesApi,
-    aiConfirmDraftApi,
-    aiCancelDraftApi
-} from "@/api/ai";
+import { useAiChatStore } from "@/stores/aiChatStore";
 import MarkdownMessage from "./MarkdownMessage.vue";
 
 // ── 宽度管理 ──────────────────────────────────────────────────────────────
@@ -25,6 +19,9 @@ const initialWidth = () => {
 const drawerWidth = ref(initialWidth());
 const drawerSize  = computed(() => drawerWidth.value + "px");
 const router = useRouter();
+
+// ── AI 状态由 store 管理 ────────────────────────────────────────────────
+const store = useAiChatStore();
 
 // ── 拖拽 / 点击折叠手柄 ──────────────────────────────────────────────────
 let resizeStartX    = 0;
@@ -75,12 +72,8 @@ const visible = computed({
     set: (v) => emit("update:modelValue", v)
 });
 
-// ── 会话 & 消息 ───────────────────────────────────────────────────────────
-const sessions        = ref([]);
-const currentSessionId = ref("");
-const messages        = ref([]);
+// ── UI-only 本地状态 ───────────────────────────────────────────────────
 const inputText       = ref("");
-const sending         = ref(false);
 const messagesEl      = ref(null);
 
 const scrollToBottom = async () => {
@@ -88,28 +81,17 @@ const scrollToBottom = async () => {
     if (messagesEl.value) messagesEl.value.scrollTop = messagesEl.value.scrollHeight;
 };
 
-const loadSessions = async () => {
-    try {
-        const res = await aiListSessionsApi();
-        if (res?.code === 1) sessions.value = Array.isArray(res.data) ? res.data : [];
-    } catch {}
-};
-
+// ── 会话操作（走 store） ────────────────────────────────────────────────
 const openSession = async (sessionId) => {
-    currentSessionId.value = sessionId;
-    messages.value = [];
-    try {
-        const res = await aiListMessagesApi(sessionId);
-        if (res?.code === 1 && Array.isArray(res.data)) {
-            messages.value = res.data
-                .filter(m => m.role === "user" || m.role === "assistant")
-                .map(m => ({ role: m.role, content: m.content }));
-        }
-    } catch { ElMessage.error("加载会话失败"); }
+    await store.loadMessages(sessionId);
+    store.switchSession(sessionId);
     scrollToBottom();
 };
 
-const startNewSession = () => { currentSessionId.value = ""; messages.value = []; };
+const startNewSession = () => {
+    store.switchSession(null);
+    inputText.value = "";
+};
 
 const onEnterKey = (e) => {
     if (e.shiftKey || e.isComposing || e.keyCode === 229) return;
@@ -119,64 +101,71 @@ const onEnterKey = (e) => {
 
 const sendMessage = async () => {
     const text = inputText.value.trim();
-    if (!text || sending.value) return;
-    messages.value.push({ role: "user", content: text });
+    if (!text) return;
+    if (store.runStatus.value !== "IDLE") return;  // 防止双发
     inputText.value = "";
     scrollToBottom();
-    sending.value = true;
     try {
-        const res = await aiChatApi(currentSessionId.value || null, text);
-        if (res?.code === 1) {
-            const data = res.data || {};
-            if (!currentSessionId.value) { currentSessionId.value = data.sessionId; await loadSessions(); }
-            messages.value.push({ role: "assistant", content: data.reply || "", draft: data.actionDraft || null });
-            scrollToBottom();
-        } else {
-            ElMessage.error(res?.msg || "AI 调用失败");
-            messages.value.push({ role: "assistant", content: "（AI 暂不可用，请稍后重试）" });
-        }
-    } catch { ElMessage.error("网络异常，请稍后重试"); }
-    finally { sending.value = false; }
+        // store 内部会：乐观追加 user 消息、调用 API、追加 assistant 占位、
+        // 切换 runStatus 为 RUNNING、自动 subscribe SSE
+        await store.sendMessage(store.activeSessionId.value, text);
+        scrollToBottom();
+    } catch (e) {
+        ElMessage.error((e && e.message) || "发送失败");
+    }
 };
 
+// ── 草稿确认 / 取消 ────────────────────────────────────────────────────
 const confirmDraft = async (msg) => {
     if (!msg.draft) return;
     try {
         await ElMessageBox.confirm(
             `确定执行该操作？\n${msg.draft.title}\n${msg.draft.summary}`,
             "确认执行",
-            { confirmButtonText: getConfirmText(msg.draft.type), cancelButtonText: "取消", type: "warning" }
+            {
+                confirmButtonText: getConfirmText(msg.draft.actionType),
+                cancelButtonText: "取消",
+                type: "warning"
+            }
         );
     } catch { return; }
     try {
-        const res = await aiConfirmDraftApi(msg.draft.id);
-        if (res?.code === 1) {
+        const res = await store.confirmDraft(msg.draft.id);
+        if (res && res.code === 1) {
             ElMessage.success("操作已执行");
             msg.draftCompleted = true;
             handlePostConfirmNavigation(msg.draft, res.data);
         } else {
-            ElMessage.error(res?.msg || "执行失败");
-            msg.draftFailed = res?.msg || "执行失败";
+            ElMessage.error((res && res.msg) || "执行失败");
+            msg.draftFailed = (res && res.msg) || "执行失败";
         }
-    } catch { ElMessage.error("网络异常"); }
+    } catch {
+        ElMessage.error("网络异常");
+    }
 };
 
 const cancelDraft = async (msg) => {
     if (!msg.draft) return;
     try {
-        const res = await aiCancelDraftApi(msg.draft.id);
-        if (res?.code === 1) { ElMessage.info("已取消"); msg.draftCancelled = true; }
-        else ElMessage.error(res?.msg || "取消失败");
-    } catch { ElMessage.error("网络异常"); }
+        const res = await store.cancelDraft(msg.draft.id);
+        if (res && res.code === 1) {
+            ElMessage.info("已取消");
+            msg.draftCancelled = true;
+        } else {
+            ElMessage.error((res && res.msg) || "取消失败");
+        }
+    } catch {
+        ElMessage.error("网络异常");
+    }
 };
 
-const getConfirmText = (type) => ({
+const getConfirmText = (actionType) => ({
     CREATE_ORDER:        "确认下单",
     ADD_CART_ITEM:       "确认加入购物车",
     REGISTER_MERCHANT:   "确认注册店铺",
     UPDATE_USER_PROFILE: "确认修改资料",
     UPDATE_MERCHANT:     "确认修改店铺"
-}[type] || "确认执行");
+}[actionType] || "确认执行");
 
 const cleanupBodyStyles = () => {
     document.body.style.userSelect = "";
@@ -193,7 +182,8 @@ const handlePostConfirmNavigation = (draft, data) => {
     visible.value = false;
     setTimeout(() => {
         cleanupBodyStyles();
-        switch (draft.type) {
+        const t = draft.actionType;
+        switch (t) {
             case "CREATE_ORDER":
                 router.push(data && (data.orderId || data.id) ? `/order/${data.orderId || data.id}` : "/user/orders");
                 break;
@@ -225,7 +215,7 @@ const onDocumentMouseDown = (e) => {
 
 watch(visible, (val) => {
     if (val) {
-        loadSessions();
+        store.loadSessions();
         // 延迟一帧再监听，避免打开抽屉的那次点击立刻触发关闭
         requestAnimationFrame(() => {
             document.addEventListener("mousedown", onDocumentMouseDown);
@@ -235,7 +225,7 @@ watch(visible, (val) => {
     }
 });
 onMounted(() => {
-    if (visible.value) loadSessions();
+    if (visible.value) store.loadSessions();
     window.addEventListener("resize", onWindowResize);
 });
 onBeforeUnmount(() => {
@@ -293,23 +283,28 @@ onBeforeUnmount(() => {
                 <div class="ai-sidebar">
                     <div class="ai-session-list">
                         <div
-                            v-for="s in sessions"
+                            v-for="s in store.sessions.value"
                             :key="s.id"
                             class="ai-session-item"
-                            :class="{ active: s.id === currentSessionId }"
+                            :class="{ active: s.id === store.activeSessionId.value }"
                             @click="openSession(s.id)"
                         >
-                            <div class="s-title">{{ s.title || "新会话" }}</div>
+                            <div class="s-title">
+                                {{ s.title || "新会话" }}
+                                <span v-if="s.runState === 'RUNNING'" class="run-badge running">生成中</span>
+                                <span v-else-if="s.runState === 'QUEUED'" class="run-badge queued">排队中</span>
+                                <span v-else-if="s.runState === 'FAILED'" class="run-badge failed">失败</span>
+                            </div>
                             <div class="s-meta">{{ s.messageCount || 0 }} 条</div>
                         </div>
-                        <div v-if="!sessions.length" class="ai-empty">暂无历史会话</div>
+                        <div v-if="!store.sessions.value.length" class="ai-empty">暂无历史会话</div>
                     </div>
                 </div>
 
                 <!-- 右侧聊天区 -->
                 <div class="ai-main">
                     <div ref="messagesEl" class="ai-messages">
-                        <div v-if="!messages.length" class="ai-empty-tip">
+                        <div v-if="!store.messages.value.length" class="ai-empty-tip">
                             <p>你可以这样问我：</p>
                             <ul>
                                 <li>"帮我推荐 300 元以内评分高的排球"</li>
@@ -320,14 +315,16 @@ onBeforeUnmount(() => {
                         </div>
 
                         <div
-                            v-for="(m, idx) in messages"
-                            :key="idx"
+                            v-for="(m, idx) in store.messages.value"
+                            :key="m.id || idx"
                             class="ai-msg"
                             :class="m.role"
                         >
                             <div class="bubble">
                                 <MarkdownMessage v-if="m.role === 'assistant'" :text="m.content" />
                                 <template v-else>{{ m.content }}</template>
+                                <!-- 流式输出时的"打字中"指示 -->
+                                <span v-if="m.role === 'assistant' && m.status === 'STREAMING'" class="typing-indicator">●●●</span>
                             </div>
 
                             <div v-if="m.draft" class="draft-card">
@@ -339,7 +336,7 @@ onBeforeUnmount(() => {
                                 <div v-else-if="m.draftFailed"    class="draft-state failed">执行失败：{{ m.draftFailed }}</div>
                                 <div v-else class="draft-actions">
                                     <el-button type="primary" size="small" @click="confirmDraft(m)">
-                                        {{ getConfirmText(m.draft.type) }}
+                                        {{ getConfirmText(m.draft.actionType) }}
                                     </el-button>
                                     <el-button size="small" @click="cancelDraft(m)">取消</el-button>
                                 </div>
@@ -353,13 +350,13 @@ onBeforeUnmount(() => {
                             type="textarea"
                             :rows="2"
                             placeholder="问点什么吧，回车发送，Shift+回车换行"
-                            :disabled="sending"
+                            :disabled="store.runStatus.value !== 'IDLE'"
                             resize="none"
                             @keydown.enter="onEnterKey"
                         />
                         <el-button
                             type="primary"
-                            :loading="sending"
+                            :loading="store.runStatus.value === 'QUEUED' || store.runStatus.value === 'RUNNING'"
                             :disabled="!inputText.trim()"
                             @click="sendMessage"
                         >发送</el-button>
@@ -512,6 +509,9 @@ onBeforeUnmount(() => {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 .s-meta {
     font-size: 11px;
@@ -523,6 +523,33 @@ onBeforeUnmount(() => {
     font-size: 12px;
     text-align: center;
     padding: 20px 8px;
+}
+
+/* ── 运行状态徽标（会话项） ────────────────────────────────────────────── */
+.run-badge {
+    display: inline-block;
+    padding: 1px 6px;
+    border-radius: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    flex-shrink: 0;
+    line-height: 1.4;
+}
+.run-badge.running { background: #dbeafe; color: #1e40af; }
+.run-badge.queued  { background: #fef3c7; color: #92400e; }
+.run-badge.failed  { background: #fee2e2; color: #dc2626; }
+
+/* ── 流式打字指示 ──────────────────────────────────────────────────────── */
+.typing-indicator {
+    display: inline-block;
+    margin-left: 4px;
+    color: #999;
+    font-size: 10px;
+    animation: typing-blink 1.4s infinite;
+}
+@keyframes typing-blink {
+    0%, 60%, 100% { opacity: 0.2; }
+    30% { opacity: 1; }
 }
 
 /* ── 聊天主区 ────────────────────────────────────────────────────────────── */
