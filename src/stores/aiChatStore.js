@@ -346,6 +346,9 @@ function processSseEvent(sessionId, eventText) {
             if (!Number.isNaN(n)) idNum = n;
         } else if (line.startsWith("event: ")) {
             type = line.slice(7).trim();
+        } else if (line.startsWith("event:")) {
+            // 容忍没有空格的写法（Spring SseEmitter.event().name() 默认输出就是 "event:NAME" 不带空格）
+            type = line.slice(6).trim();
         } else if (line.startsWith("data: ")) {
             dataStr = line.slice(6);
         } else if (line.startsWith("data:")) {
