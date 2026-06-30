@@ -125,8 +125,12 @@ function switchSession(sessionId) {
 async function sendMessage(sessionId, text) {
     const trimmed = (text || "").trim();
     if (!trimmed) return null;
-    const sid = sessionId || "";
+    // 不要把 null 强转 "" —— getOrCreateSessionState 收到 "" 会返回 null，
+    // 后面 state.runStatus = ... 就会爆 "Cannot set properties of null"。
+    // null 表示"还没绑定到任何 session"，让后端首次创建即可。
+    const sid = sessionId;
     const state = getOrCreateSessionState(sid);
+    if (!state) return null;  // null sessionId 不创建本地 state
 
     state.runStatus = "QUEUED";
 
