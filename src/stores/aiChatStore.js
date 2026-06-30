@@ -54,8 +54,10 @@ const lastEventId = computed(() => {
 });
 
 // ── 内部辅助 ──────────────────────────────────────────────────────────
+// 允许 null/undefined 作为 key —— 表示"乐观阶段，还没拿到后端创建的 sessionId"。
+// 此时需要暂存 user 消息 + runStatus，等 API 返回真 sessionId 后由 sendMessage
+// 负责把这条 state 的内容迁移到新 key 上、清空原 key。
 function getOrCreateSessionState(sessionId) {
-    if (!sessionId) return null;
     if (!sessionStateMap.has(sessionId)) {
         sessionStateMap.set(sessionId, {
             messages: [],
@@ -125,12 +127,10 @@ function switchSession(sessionId) {
 async function sendMessage(sessionId, text) {
     const trimmed = (text || "").trim();
     if (!trimmed) return null;
-    // 不要把 null 强转 "" —— getOrCreateSessionState 收到 "" 会返回 null，
-    // 后面 state.runStatus = ... 就会爆 "Cannot set properties of null"。
-    // null 表示"还没绑定到任何 session"，让后端首次创建即可。
+    // sid 可以是 null（首次发送，后端会创建新会话）。
+    // 用 null 作为 key 暂存乐观状态，等 API 返回真 sessionId 再迁移过去。
     const sid = sessionId;
     const state = getOrCreateSessionState(sid);
-    if (!state) return null;  // null sessionId 不创建本地 state
 
     state.runStatus = "QUEUED";
 
@@ -163,8 +163,24 @@ async function sendMessage(sessionId, text) {
             const realSid = respSid || sid;
             const realState = getOrCreateSessionState(realSid);
 
-            // 更新 user 消息的临时 id
-            if (userMessageId) userMsg.id = userMessageId;
+            // ── 迁移：从暂存 state（key 为 null 或旧 sid）迁移到 realState ──
+            // 1) user 消息：把 null state 里的 userMsg 搬到 realState，更新 id + sessionId
+            // 2) 清空原 state（避免 UI 在 activeSessionId 切到 realSid 之前还显示 null 的气泡）
+            if (state !== realState) {
+                const idx = state.messages.indexOf(userMsg);
+                if (idx !== -1) state.messages.splice(idx, 1);
+                userMsg.sessionId = realSid;
+                if (userMessageId) userMsg.id = userMessageId;
+                realState.messages.push(userMsg);
+                // 把原 state 的其他内容也搬过去（理论上只有 userMsg，但保险起见全搬）
+                while (state.messages.length) {
+                    realState.messages.push(state.messages.shift());
+                }
+                state.runStatus = "IDLE";
+            } else if (userMessageId) {
+                // 同一 session：只更新 id
+                userMsg.id = userMessageId;
+            }
 
             // 追加 assistant 占位
             realState.messages.push({
