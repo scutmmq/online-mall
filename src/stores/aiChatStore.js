@@ -57,6 +57,43 @@ const lastEventId = computed(() => {
 // 允许 null/undefined 作为 key —— 表示"乐观阶段，还没拿到后端创建的 sessionId"。
 // 此时需要暂存 user 消息 + runStatus，等 API 返回真 sessionId 后由 sendMessage
 // 负责把这条 state 的内容迁移到新 key 上、清空原 key。
+
+// ── 前端 DSML 防御层（C7） ────────────────────────────────────────────
+// 后端已经 strip 了，但为了纵深防御 + 处理历史 DB 里残留的脏数据，
+// 前端在 SSE delta 拼接、整消息替换、loadMessages 加载 三个入口都再 strip 一次。
+// 算法与后端 com.scutmmq.ai.util.DsmlSanitizer 保持一致：栈式 + 不平衡 bail。
+const DSML_OPEN = "<｜｜DSML｜｜";   // U+FF5C 全角竖线 ×2
+const DSML_CLOSE = "</｜｜DSML｜｜";
+
+function stripDsml(s) {
+    if (s == null || s === "") return s;
+    let result = "";
+    let i = 0;
+    const openStack = [];   // 每个 open 对应当前 result.length
+    while (i < s.length) {
+        if (s.startsWith(DSML_OPEN, i)) {
+            openStack.push(result.length);
+            i += DSML_OPEN.length;
+        } else if (s.startsWith(DSML_CLOSE, i)) {
+            if (openStack.length === 0) {
+                // 不平衡 → 放弃 strip,保留原文(避免误删正常内容)
+                return s;
+            }
+            const poppedAt = openStack.pop();
+            result = result.substring(0, poppedAt);
+            i += DSML_CLOSE.length;
+        } else {
+            result += s[i];
+            i++;
+        }
+    }
+    if (openStack.length > 0) {
+        // 有未关闭的块 → 放弃 strip
+        return s;
+    }
+    return result;
+}
+
 function getOrCreateSessionState(sessionId) {
     if (!sessionStateMap.has(sessionId)) {
         sessionStateMap.set(sessionId, {
@@ -103,7 +140,14 @@ async function loadMessages(sessionId) {
         const res = await aiListMessagesApi(sessionId);
         if (res && res.code === 1) {
             const state = getOrCreateSessionState(sessionId);
-            state.messages = Array.isArray(res.data) ? res.data : [];
+            // C7:DB 历史里可能有 C2 部署前写入的脏数据,加载时再 strip 一次。
+            const raw = Array.isArray(res.data) ? res.data : [];
+            state.messages = raw.map((m) => {
+                if (m && m.role === "assistant" && typeof m.content === "string") {
+                    return { ...m, content: stripDsml(m.content) };
+                }
+                return m;
+            });
         }
     } catch (e) {
         console.warn("[aiChatStore] loadMessages failed", sessionId, e);
@@ -457,14 +501,18 @@ function findAssistantMsg(state, runId, messageId) {
 function appendToAssistant(state, runId, messageId, delta) {
     const msg = findAssistantMsg(state, runId, messageId);
     if (!msg) return;
-    msg.content = (msg.content || "") + delta;
+    // C7:纵深防御 — 后端即使漏 strip,前端兜底
+    const clean = stripDsml(delta);
+    if (!clean) return; // 整片都是 DSML,跳过(已由后端发 dsmlOnly:true 标识)
+    msg.content = (msg.content || "") + clean;
     msg.updatedAt = nowIso();
 }
 
 function replaceOrCreateAssistant(state, runId, messageId, content) {
     const msg = findAssistantMsg(state, runId, messageId);
     if (msg) {
-        msg.content = content;
+        // C7:整消息替换时也 strip
+        msg.content = stripDsml(content);
         msg.updatedAt = nowIso();
     }
 }
