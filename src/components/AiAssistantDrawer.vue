@@ -130,17 +130,33 @@ const confirmDraft = async (msg) => {
         );
     } catch { return; }
     try {
+        // C12 修复:msg.draft 必须有 id 才能调确认接口。
+        // 之前 PersistingOrchestratorListener.onDraftCreated emit SSE 时漏了 id/expiresAt,
+        // 导致 msg.draft.id 是 undefined → store.confirmDraft 早返回 null → 无请求 → UI 显示
+        // "执行失败" 但 network 面板看不到任何请求,定位极其困难。
+        // C12 后端 fix:aiAssistantService.persistDraftIfPresent 在 persist 后 emit
+        // 第二个 draft.created SSE,补齐 id + expiresAt。这里做防御:如果还是没 id,
+        // 提示用户重新生成草稿,而不是沉默返回 "执行失败"。
+        if (!msg.draft.id) {
+            ElMessage.error("草稿数据不完整,请重新发送「确认下单」");
+            msg.draftFailed = "草稿数据不完整,请重新生成";
+            return;
+        }
         const res = await store.confirmDraft(msg.draft.id);
         if (res && res.code === 1) {
             ElMessage.success("操作已执行");
             msg.draftCompleted = true;
+            msg.draftFailed = null; // C12 顺带清掉可能的残留失败状态
             handlePostConfirmNavigation(msg.draft, res.data);
         } else {
-            ElMessage.error((res && res.msg) || "执行失败");
-            msg.draftFailed = (res && res.msg) || "执行失败";
+            const errMsg = (res && res.msg) || "执行失败";
+            ElMessage.error(errMsg);
+            msg.draftFailed = errMsg;
         }
-    } catch {
-        ElMessage.error("网络异常");
+    } catch (err) {
+        console.error("[aiChat] confirmDraft failed", err);
+        ElMessage.error("网络异常,请重试");
+        msg.draftFailed = "网络异常,请重试";
     }
 };
 
