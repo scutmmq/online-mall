@@ -112,10 +112,44 @@ async function loadMessages(sessionId) {
             // C7:DB 历史里可能有 C2 部署前写入的脏数据,加载时再 strip 一次。
             const raw = Array.isArray(res.data) ? res.data : [];
             state.messages = raw.map((m) => {
-                if (m && m.role === "assistant" && typeof m.content === "string") {
-                    return { ...m, content: stripDsml(m.content) };
+                if (!m) return m;
+                const enriched = { ...m };
+                if (enriched.role === "assistant" && typeof enriched.content === "string") {
+                    enriched.content = stripDsml(enriched.content);
                 }
-                return m;
+                // C13:从后端拉回的消息可能带 draft.status(PENDING/CONFIRMED/CANCELLED/EXPIRED/FAILED)
+                // 之前 UI 只在用户点击时设置 draftCompleted/draftCancelled/draftFailed,
+                // 导致刷新后已 CONFIRMED 的草稿卡片仍显示按钮,点了就报"草稿状态不允许执行"。
+                // 这里根据后端 status 同步设置 UI flag,刷新后状态正确。
+                if (enriched.role === "assistant" && enriched.draft && enriched.draft.status) {
+                    switch (enriched.draft.status) {
+                        case "CONFIRMED":
+                            enriched.draftCompleted = true;
+                            enriched.draftFailed = null;
+                            enriched.draftCancelled = null;
+                            break;
+                        case "CANCELLED":
+                            enriched.draftCancelled = true;
+                            enriched.draftCompleted = false;
+                            enriched.draftFailed = null;
+                            break;
+                        case "FAILED":
+                            enriched.draftFailed = enriched.draft.failReason || "草稿执行失败";
+                            enriched.draftCompleted = false;
+                            enriched.draftCancelled = null;
+                            break;
+                        case "EXPIRED":
+                            enriched.draftFailed = "草稿已过期,请重新生成";
+                            enriched.draftCompleted = false;
+                            enriched.draftCancelled = null;
+                            break;
+                        case "PENDING":
+                        default:
+                            // PENDING:不设 flag,继续显示按钮
+                            break;
+                    }
+                }
+                return enriched;
             });
         }
     } catch (e) {
