@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watchEffect, onMounted, nextTick } from "vue";
 import { renderMarkdown, enhanceMarkdown } from "@/utils/markdown";
+import { stripDsml } from "@/utils/dsmlSanitizer";
 import "highlight.js/styles/github.css";
 
 const props = defineProps({
@@ -11,7 +12,11 @@ const rootEl = ref(null);
 const html = ref("");
 
 watchEffect(() => {
-    html.value = renderMarkdown(props.text);
+    // C7.1:渲染前 strip 整段累积的 content。
+    // 这里 strip 的是 m.content 完整文本,平衡 DSML 一定能被完全剔除;
+    // SSE chunk 边界的非平衡部分由 stripDsml 的「不 bail」策略安全跳过。
+    const cleanText = stripDsml(props.text);
+    html.value = renderMarkdown(cleanText);
 });
 
 const enhance = async () => {

@@ -21,6 +21,7 @@ import {
     aiConfirmDraftApi,
     aiCancelDraftApi,
 } from "@/api/ai";
+import { stripDsml } from "@/utils/dsmlSanitizer";
 
 // ── 模块级单例状态（整个 SPA 共享一份）─────────────────────────────────
 const sessions = ref([]);
@@ -58,41 +59,9 @@ const lastEventId = computed(() => {
 // 此时需要暂存 user 消息 + runStatus，等 API 返回真 sessionId 后由 sendMessage
 // 负责把这条 state 的内容迁移到新 key 上、清空原 key。
 
-// ── 前端 DSML 防御层（C7） ────────────────────────────────────────────
-// 后端已经 strip 了，但为了纵深防御 + 处理历史 DB 里残留的脏数据，
-// 前端在 SSE delta 拼接、整消息替换、loadMessages 加载 三个入口都再 strip 一次。
-// 算法与后端 com.scutmmq.ai.util.DsmlSanitizer 保持一致：栈式 + 不平衡 bail。
-const DSML_OPEN = "<｜｜DSML｜｜";   // U+FF5C 全角竖线 ×2
-const DSML_CLOSE = "</｜｜DSML｜｜";
-
-function stripDsml(s) {
-    if (s == null || s === "") return s;
-    let result = "";
-    let i = 0;
-    const openStack = [];   // 每个 open 对应当前 result.length
-    while (i < s.length) {
-        if (s.startsWith(DSML_OPEN, i)) {
-            openStack.push(result.length);
-            i += DSML_OPEN.length;
-        } else if (s.startsWith(DSML_CLOSE, i)) {
-            if (openStack.length === 0) {
-                // 不平衡 → 放弃 strip,保留原文(避免误删正常内容)
-                return s;
-            }
-            const poppedAt = openStack.pop();
-            result = result.substring(0, poppedAt);
-            i += DSML_CLOSE.length;
-        } else {
-            result += s[i];
-            i++;
-        }
-    }
-    if (openStack.length > 0) {
-        // 有未关闭的块 → 放弃 strip
-        return s;
-    }
-    return result;
-}
+// stripDsml 从 @/utils/dsmlSanitizer 导入(顶层)。算法:栈式扫描,不平衡时返回
+// 「已 strip 的部分」,不 bail 原文。这样 SSE chunk 边界不平衡也不会泄漏 DSML,
+// 因为渲染层 MarkdownMessage 还会对整段 m.content 再 strip 一次。
 
 function getOrCreateSessionState(sessionId) {
     if (!sessionStateMap.has(sessionId)) {
@@ -501,9 +470,10 @@ function findAssistantMsg(state, runId, messageId) {
 function appendToAssistant(state, runId, messageId, delta) {
     const msg = findAssistantMsg(state, runId, messageId);
     if (!msg) return;
-    // C7:纵深防御 — 后端即使漏 strip,前端兜底
+    // C7.1:纵深防御 — chunk 级 best-effort strip。
+    // 整段平衡 DSML 在这里被剔除;跨 chunk 不平衡的部分由渲染层兜底(渲染前 strip 整 m.content)。
     const clean = stripDsml(delta);
-    if (!clean) return; // 整片都是 DSML,跳过(已由后端发 dsmlOnly:true 标识)
+    if (!clean) return; // 整片都是 DSML 或 unclosed block,跳过(由渲染层处理)
     msg.content = (msg.content || "") + clean;
     msg.updatedAt = nowIso();
 }
