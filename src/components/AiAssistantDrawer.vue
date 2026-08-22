@@ -314,9 +314,16 @@ onBeforeUnmount(() => {
                             </ul>
                         </div>
 
+                        <!--
+                          C10.2 修复:role === "tool" 是持久化到 ai_message 表的工具调用结果
+                          (格式 "[search_products] {...}"),是模型下一轮 history 的输入,
+                          不是给用户看的内容。Chat UI 必须过滤掉,否则:
+                          - 工具结果(JSON)直接显示在对话框里很丑
+                          - C8 sentinel "[系统提示] 工具已用相同参数调用过 N 次" 也会泄漏到 UI
+                          模型上下文依然能拿到(loadHistoryExcluding 会把 tool 转成 user role 喂回)。
+                        -->
+                        <template v-for="(m, idx) in store.messages.value.filter(x => x.role !== 'tool')" :key="m.id || idx">
                         <div
-                            v-for="(m, idx) in store.messages.value"
-                            :key="m.id || idx"
                             class="ai-msg"
                             :class="m.role"
                         >
@@ -342,6 +349,7 @@ onBeforeUnmount(() => {
                                 </div>
                             </div>
                         </div>
+                        </template>
                     </div>
 
                     <div class="ai-input">
