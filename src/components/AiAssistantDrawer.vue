@@ -102,7 +102,7 @@ const onEnterKey = (e) => {
 const sendMessage = async () => {
     const text = inputText.value.trim();
     if (!text) return;
-    if (store.runStatus.value !== "IDLE") return;  // 防止双发
+    if (store.runStatus.value === "QUEUED" || store.runStatus.value === "RUNNING") return;  // 防止双发
     inputText.value = "";
     scrollToBottom();
     try {
@@ -374,7 +374,7 @@ onBeforeUnmount(() => {
                             type="textarea"
                             :rows="2"
                             placeholder="问点什么吧，回车发送，Shift+回车换行"
-                            :disabled="store.runStatus.value !== 'IDLE'"
+                            :disabled="store.runStatus.value === 'QUEUED' || store.runStatus.value === 'RUNNING'"
                             resize="none"
                             @keydown.enter="onEnterKey"
                         />

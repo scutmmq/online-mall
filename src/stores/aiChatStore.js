@@ -260,7 +260,7 @@ async function sendMessage(sessionId, text) {
 
             return data;
         } else {
-            state.runStatus = "FAILED";
+            state.runStatus = "IDLE";
             const err = new Error((res && res.msg) || "send failed");
             console.error("[aiChatStore] sendMessage business fail", err);
             throw err;
@@ -268,7 +268,7 @@ async function sendMessage(sessionId, text) {
     } catch (e) {
         // 已经 push 进 messages 的 user 占位保留，让用户能看到自己的输入
         const cur = getOrCreateSessionState(sid);
-        if (cur) cur.runStatus = "FAILED";
+        if (cur) cur.runStatus = "IDLE";
         console.error("[aiChatStore] sendMessage error", e);
         throw e;
     }
@@ -309,7 +309,7 @@ function subscribeSessionEvents(sessionId) {
                 );
                 const cur = sessionStateMap.get(sessionId);
                 if (cur) {
-                    cur.runStatus = "FAILED";
+                    cur.runStatus = "IDLE";
                     cur.abortController = null;
                 }
                 return;
@@ -319,7 +319,10 @@ function subscribeSessionEvents(sessionId) {
             if (!reader) {
                 console.error("[aiChatStore] SSE no readable body", sessionId);
                 const cur = sessionStateMap.get(sessionId);
-                if (cur) cur.abortController = null;
+                if (cur) {
+                    cur.runStatus = "IDLE";
+                    cur.abortController = null;
+                }
                 return;
             }
 
@@ -343,7 +346,10 @@ function subscribeSessionEvents(sessionId) {
 
             // 流自然结束（服务器主动 close / 网络断）
             const cur = sessionStateMap.get(sessionId);
-            if (cur) cur.abortController = null;
+            if (cur) {
+                cur.runStatus = "IDLE";
+                cur.abortController = null;
+            }
         })
         .catch((err) => {
             if (err && err.name === "AbortError") {
@@ -353,7 +359,7 @@ function subscribeSessionEvents(sessionId) {
             console.error("[aiChatStore] SSE error", sessionId, err);
             const cur = sessionStateMap.get(sessionId);
             if (cur) {
-                cur.runStatus = "FAILED";
+                cur.runStatus = "IDLE";
                 cur.abortController = null;
             }
         });
@@ -465,7 +471,7 @@ function processSseEvent(sessionId, eventText) {
             break;
         }
         case "run.failed": {
-            state.runStatus = "FAILED";
+            state.runStatus = "IDLE";
             markAssistantFinished(state, runId, messageId, "FAILED", inner);
             loadSessions();
             break;

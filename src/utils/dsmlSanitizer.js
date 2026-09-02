@@ -45,13 +45,19 @@ function findDsmlTagEnd(s, i, prefix) {
  */
 export function stripDsml(s) {
     if (s == null) return s;
+    let text = s;
+    // 剔除 <think>...</think> 及其不闭合变体
+    text = text.replace(/<think>[\s\S]*?<\/think>/g, "");
+    text = text.replace(/<think>[\s\S]*$/g, "");
+    text = text.replace(/<\/think>/g, "");
+
     let result = "";
     let i = 0;
     const openStack = [];
 
-    while (i < s.length) {
-        const openEnd = findDsmlTagEnd(s, i, DSML_OPEN);
-        const closeEnd = openEnd < 0 ? findDsmlTagEnd(s, i, DSML_CLOSE) : -1;
+    while (i < text.length) {
+        const openEnd = findDsmlTagEnd(text, i, DSML_OPEN);
+        const closeEnd = openEnd < 0 ? findDsmlTagEnd(text, i, DSML_CLOSE) : -1;
 
         if (openEnd > 0) {
             // 找到完整 open 标签
@@ -70,7 +76,7 @@ export function stripDsml(s) {
         } else {
             // 当前字符不在任何 DSML 标签内
             if (openStack.length === 0) {
-                result += s[i];
+                result += text[i];
             }
             // 块内字符:跳过(已经决定这块要被 strip)
             i++;

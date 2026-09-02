@@ -236,9 +236,11 @@ const fetchReceiptAddress = async (addressId) => {
 const fetchOrderDetail = async () => {
   try {
     isLoading.value = true;
+    isError.value = false;
     const res = await getOrderItemsByOrderId(orderId.value);
-    if (res.code === 1 && res.data?.code === 1) {
-      orderItems.value = res.data.data || [];
+    const items = Array.isArray(res?.data) ? res.data : (Array.isArray(res?.data?.data) ? res.data.data : null);
+    if (res?.code === 1 && items !== null) {
+      orderItems.value = items;
       if (orderItems.value.length > 0) {
         orderNumber.value = orderItems.value[0].orderNumber || '未知订单号';
         totalAmount.value = orderItems.value.reduce((sum, item) => {
@@ -257,7 +259,7 @@ const fetchOrderDetail = async () => {
       }
     } else {
       isError.value = true;
-      ElMessage.error(res.data?.msg || res.msg || '订单详情获取失败');
+      ElMessage.error(res?.msg || '订单详情获取失败');
       totalAmount.value = 0;
       receiptAddress.value = null;
     }
